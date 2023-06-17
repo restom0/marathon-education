@@ -1,0 +1,61 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.banner{
+    width: 100%;
+    height: 50vh;
+    text-align: center;
+    background-image: url("https://i0.wp.com/www.techsignin.com/wp-content/uploads/2023/04/210207-fpt-telecom-chu-tich-hdqt-tong-giam-doc-4.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100% 50vh;
+}
+ul.menu{
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+}
+div.menu{
+    background-color: orangered;
+    height: 5vh;
+}
+li{
+    padding: 1vh 2vh 0 2vh;
+    color: white;
+    font-size: 15pt;
+}
+.to{
+    font-size: 18pt;
+}
+a.menu{
+    text-decoration: none;
+    color: white;
+}
+.main{
+    display: flex;
+}
+.content{
+    width: 70%;
+    height: 50vh;
+}
+.sidebar{
+    width: 30%;
+    height: 50vh;
+    background-color: rgb(161, 150, 150);
+}
+hr{
+    border: 1px solid orangered;
+}
+.footer{
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    text-align: center;
+    background-color: rgb(192, 231, 229);
+}
+ul.sidebar{
+    width: 50vh;
+}
+a{
+    text-decoration: none;
+}
