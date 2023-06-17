@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.wrapper{
+    max-width: 97%;
+    margin: 0px auto;
+}
+.row{
+    max-width: 100&;
+    display: grid;
+    grid-template-columns: 5% 90%
+    justify-content:space-between;
+}
+.col1{
+    width: 10%;
+}
+.col1>img{
+    width:100px
+}
+ul{
+    text-decoration: none;
+    list-style: none;
+}
+.list{
+    display: flex
+}

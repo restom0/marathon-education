@@ -1,0 +1,22 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+.banner{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    row-gap: 2vh;
+}
+.container{
+    width: 48vh;
+    height: 48vh;
+    border: 1px solid black;
+    outline: 15px solid yellow;
+    outline-offset: -16px;
+    border-radius: 5%;
+    margin: 0;
+    padding: 0;
+    background-image: url("https://vapa.vn/wp-content/uploads/2022/12/hinh-anh-nho-cute-001.jpg");
+    background-size: cover;
+}

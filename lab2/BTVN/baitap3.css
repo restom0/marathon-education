@@ -1,0 +1,23 @@
+img{
+    height: 15vh;
+}
+.banner{
+    width: 100%;
+    height: 15vh;
+    text-align: center;
+}
+ul{
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    margin-left: 0;
+}
+li{
+    padding: 0 1vh 0 1vh;
+}
+.to{
+    font-size: 18pt;
+}
+a{
+    text-decoration: none;
+}

@@ -1,0 +1,24 @@
+h2{
+    color: rgb(169, 94, 94);
+}
+p{
+    color: rgb(117, 36, 50);
+}
+h1{
+    color:aqua;
+}
+h3{
+    color: blue;
+}
+h4{
+    color: blueviolet;
+}
+h5{
+    color: brown;
+}
+h6{
+    color: cadetblue;
+}
+div{
+    margin-left: 20px;
+}
