@@ -1,0 +1,128 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.wrapper{
+    width:98.5%;
+    margin: 0px auto;
+    background-color: rgb(232, 232, 232);
+}
+
+@media only screen and (min-width: 576px) {
+    .navbar-expand-sm .navbar-nav .dropdown-menu {
+        margin-top: 12%;
+        position: absolute;
+    }
+}
+
+.sidenav{
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    box-shadow: 0px 0px 5px 5px grey;
+}
+.w-70{
+    width: 70%;
+    margin: 0px auto;
+}
+.w-70>.col-md-4>img{
+    width: 100%;
+    vertical-align: middle;
+}
+.productRow{
+    display: grid;
+    grid-template-columns: 23% 23% 23% 23%;
+    justify-content: space-around;
+}
+.productCol{
+    background-color: white;
+    padding: 10px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+.addToCardBtn{
+    width: 80px;
+    height: 30px;
+    background-color: rgb(180, 181, 240);
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    padding-top: 1%;
+    margin: 0px auto;
+    border-radius: 7px;
+}
+.addToCardBtn:hover{
+    background-color: blue;
+}
+.mt-5{
+    margin-top:5%;
+}
+.imgrow{
+    width: 80%;
+    margin: 0px auto;
+}
+.imgrow >img{
+    max-height: 200px;
+    width: auto;
+    margin: 0px auto;
+    
+}
+.row>.col-md-3{
+    width: 24%;
+    box-shadow: 2px 2px 2px 2px rgb(228, 228, 228);
+    border-radius: 12px;
+    transition: ease-in-out .2s;
+    background-color: white;
+}
+.productCol:hover{
+    box-shadow: 2px 2px 2px 2px rgb(224, 224, 224);
+}
+.row>.col-md-3>.row{
+    width: 97%;
+    margin: 0px auto;
+}
+.row>h3{
+    font-size: 18px;
+    padding-top: 5%;
+    padding-left: 10%;
+}
+.text-blue{
+    color:blue;
+    font-weight: bold;
+}
+.productRow>h1{
+    font-weight: bolder;
+    margin-bottom: 5%;
+}
+.buttonxem{
+    width: 20%;
+    margin: 10px auto;
+
+}
+.buttonxem:hover{
+    border: 1px solid blue;
+}
+.footer{
+    min-height: 100px;
+}
+@media only screen and (max-width: 900px) {
+    .navbar-expand-sm .navbar-nav .dropdown-menu {
+        margin-top: 12%;
+        position: absolute;
+    }
+    .productRow{
+        display: grid;
+        grid-template-columns: 100%;
+        justify-content: space-around;
+        margin-bottom: 10px;
+    }
+    .productCol{
+        background-color: white;
+        padding: 10px 10px;
+        border-radius: 12px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        
+    }
+}
