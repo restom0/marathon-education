@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS riêng -->
+    <link rel="stylesheet" href="./productDetails.css">
+
+    <!-- CSS icon -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- Owl-carousel -->
+    <link rel="stylesheet" href="../owl.carousel.min.css">
+    <link rel="stylesheet" href="../owl.theme.default.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+        integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+    <!-- Sweet talker  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.20/dist/sweetalert2.all.min.js"></script>
+
+
+</head>
+
+<body>
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">Giỏ hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
+                                    <th scope="col">Tùy chỉnh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="result">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#" style="text-decoration: none;" class="btn-sm btn-success" id="checkoutBtn">Thanh
+                        toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login form</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="Email" id="label-email">Email</label>
+                    <input type="text" placeholder="abcxyz@gmail.com" name="" id="Email" style="width:100%">
+                    <label for="Email" id="label-API">API </label>
+                    <input type="text" name="" id="API" style="width:100%">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="loginbtn">Login</button>
+                    <button type="button" class="btn btn-danger" id="logoutbtn-2">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="searchItemsModal" tabindex="-1" aria-labelledby="searchItemsModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchItemsModalLabel">Kết quả tìm kiếm</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Thương hiệu</th>
+                                    <th scope="col">Loại thiết bị</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchResult">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancel">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <img src="https://yt3.googleusercontent.com/KExMKZqWdtVxdDxZaVzQ_xZhE81AviwRDmmZpwveNExBqOwyjmTMUXIhj-lv63sVdUg0TdrhGQ=s900-c-k-c0x00ffffff-no-rj"
+                style="width: 3%; height: 3%; border-radius:100%" alt="" />
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle nav-link active" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Loại sản phẩm
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="listCategory">
+                        </ul>
+
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Thương hiệu
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="listBrand">
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                            id="login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="loginModal"
+                            id="logoutbtn">Logout</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" id="searchInput"
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="button" data-bs-toggle="modal"
+                        data-bs-target="#searchItemsModal" id="searchBtn">Search</button>
+                    <button style="margin-left: 2%;" class="btn btn-primary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#cartModal" id="showCart"><i class='bx bx-cart-alt'></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="product">
+        <h1>Giỏ mua hàng</h1>
+        <div id="cartContainer">
+            <div class="table-responsive">
+                <table class="table table-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thành tiền</th>
+                            <th scope="col">Tùy chỉnh</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productResult">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button type="button" class="btn-sm btn-success success" id="deleteAllItem">
+            Thanh toán
+        </button>
+    </div>
+    <script src="./checkout.js"></script>
+</body>
+
+</html>
