@@ -54,7 +54,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn-sm btn-success">Thanh toán</button>
+                    <a href="./checkout.html" style="text-decoration: none;" class="btn-sm btn-success"
+                        id="checkoutBtn">Thanh
+                        toán</a>
                 </div>
             </div>
         </div>
@@ -64,7 +66,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="loginModalLabel">Login form</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Close</button>
                 </div>
                 <div class="modal-body">
                     <label for="Email" id="label-email">Email</label>
@@ -88,7 +90,14 @@
                     <h5 class="modal-title" id="searchItemsModalLabel">Kết quả tìm kiếm</h5>
                 </div>
                 <div class="modal-body">
-                    <div class="table-responsive">
+                    <div class="filter">
+                        <label for="filter">Phân khúc giá: </label>
+                        <input type="text" name="filter" id="filter" style="height: 3.9vh;">
+                        <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;" id="filterBtn">Apply</button>
+                        <br>
+                        <br>
+                    </div>
+                    <div class=" table-responsive">
                         <table class="table table-primary">
                             <thead>
                                 <tr>
@@ -122,7 +131,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

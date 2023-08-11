@@ -37,10 +37,10 @@ function hienThiGioHang() {
         str += `
         <tr class="">
             <td scope="row">`+ name + `</td>
-            <td>`+ price.toLocaleString('en-US') + `</td>
+            <td>`+ price.toLocaleString('en-US') + `đ</td>
             <td>`+ count + `</td>
-            <td>`+ (count * price).toLocaleString('en-US') + `</td>
-            <td><span id="deleteItems" data-id="`+ parseInt(item.id) + `"><i class='bx bxs-folder-minus' ></i></span>
+            <td>`+ (count * price).toLocaleString('en-US') + `đ</td>
+            <td><button type="button" class="btn-sm btn-danger danger" id="deleteItems" data-id="`+ parseInt(item.id) + `">Xóa</button>
             </td>
         </tr>
         `;
@@ -50,7 +50,7 @@ function hienThiGioHang() {
     str += `
     <tr>
         <td colspan="3"><span >Tổng cộng</span></td>
-        <td>`+ tong.toLocaleString('en-US') + `</td>
+        <td>`+ tong.toLocaleString('en-US') + `đ</td>
         <td></td>
     </tr>
     `;
@@ -132,7 +132,6 @@ $(document).ready(function () {
     Logout();
     addToCart();
     hienThiGioHang();
-    checkout();
     searchItem();
 });
 //Load san pham
@@ -388,10 +387,6 @@ function Login() {
         }
     });
 }
-function checkout() {
-    var href = "/lab9/checkout.html?cartDetails=" + localStorage.getItem("cartDetails");
-    document.getElementById('checkoutBtn').setAttribute("href", href);
-}
 function searchItem() {
     $('#searchBtn').click(function (e) {
         e.preventDefault();
@@ -425,21 +420,60 @@ function searchItem() {
                 dataType: "JSON",
                 success: function (res) {
                     var str = ``;
-                    console.log(res.result);
                     res.result.forEach((el) => {
                         str += `
         <tr class="">
             <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
-            <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/lab9/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-            <td>`+ el.price.toLocaleString('en-US') + `</td>
+            <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+            <td>`+ el.price.toLocaleString('en-US') + `đ</td>
             <td>`+ el.brandname + `</td>
             <td>`+ el.catename + `</td>
             </td>
         </tr>
         `;
                     })
-                    console.log(str);
                     $('#searchResult').html(str);
+                    $('#filterBtn').click(function (e) {
+                        e.preventDefault();
+                        var filterInput = $("#filter").val().trim();
+
+                        if (filterInput == '') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Input không khả dụng'
+                            })
+                        }
+                        else {
+                            str = '';
+                            res.result.forEach((el) => {
+                                if (Number(el.price) <= Number(filterInput)) {
+                                    str += `
+                    <tr class="" >
+                    <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
+                    <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+                    <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                    <td>`+ el.brandname + `</td>
+                    <td>`+ el.catename + `</td>
+                    </td >
+                </tr >
+                    `;
+                                }
+                            })
+                            $('#searchResult').html(str);
+                        }
+                    });
                 }
             })
         }
