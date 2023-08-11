@@ -5,15 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <!-- CSS riêng -->
-    <link rel="stylesheet" href="./productDetails.css">
 
     <!-- CSS icon -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <!-- Owl-carousel -->
-    <link rel="stylesheet" href="../owl.carousel.min.css">
-    <link rel="stylesheet" href="../owl.theme.default.min.css">
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -93,17 +87,46 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="searchItemsModalLabel">Kết quả tìm kiếm</h5>
+                    <div class="filter">
+                        <select class="form-select form-select-sm" aria-label=".form-select-sm example"
+                            id="chooseFilter">
+                            <option selected>Chọn bộ lọc</option>
+                            <option value="below">Dưới giá chọn</option>
+                            <option value="above">Trên giá chọn</option>
+                            <option value="between">Giữa giá chọn</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <div class="filter">
-                        <label for="filter">Phân khúc giá: </label>
-                        <input type="text" name="filter" id="filter" style="height: 3.9vh;">
-                        <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
-                            id="filterBtn">Apply</button>
-                        <br>
-                        <br>
+                        <div id="below">
+                            <label for="filter">Giá trần: </label>
+                            <input type="text" name="filter" id="below-filter" style="height: 3.9vh;">
+                            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
+                                id="below-filterBtn">Apply</button>
+                            <br>
+                            <br>
+                        </div>
+                        <div id="above">
+                            <label for="filter">Giá sàn: </label>
+                            <input type="text" name="filter" id="above-filter" style="height: 3.9vh;">
+                            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
+                                id="above-filterBtn">Apply</button>
+                            <br>
+                            <br>
+                        </div>
+                        <div id="between">
+                            <label for="filter">Giá sàn: </label>
+                            <input type="text" name="filter" id="above-between-filter" style="height: 3.9vh;">
+                            <label for="filter">Giá trần: </label>
+                            <input type="text" name="filter" id="below-between-filter" style="height: 3.9vh;">
+                            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
+                                id="between-filterBtn">Apply</button>
+                            <br>
+                            <br>
+                        </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class=" table-responsive">
                         <table class="table table-primary">
                             <thead>
                                 <tr>
@@ -137,7 +160,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                        <a class="nav-link active" aria-current="page" href="../Homepage/homepage.html">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle nav-link active" href="#" id="navbarDropdown" role="button"
@@ -176,37 +199,29 @@
             </div>
         </div>
     </nav>
-    <div class="maincontainer" style="width:80%;margin:10px auto">
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <img src="" alt="" class="w-100" id="productImage">
-            </div>
-            <div class="col-md-6 text-center" style="margin: 10px auto">
-                <h4 class="text-bold" id="productName" style="margin-top: 20vh;"></h4>
-                <h4 class="text-bold text-danger" id="productPrice"></h4>
-                <div class="row">
-                    <div class="col-md">
-                        <button class="w-100 btn btn-primary" id="addToCartBtn">Mua ngay</button>
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md">
-                        <button class="w-100 btn btn-outline-primary">Trả góp</button>
-                    </div>
-                    <div class="col-md">
-                        <button class="w-100 btn btn-outline-primary">Thu cũ đổi mới</button>
-                    </div>
-                </div>
+    <div class="product">
+        <h1>Giỏ mua hàng</h1>
+        <div id="cartContainer">
+            <div class="table-responsive">
+                <table class="table table-primary">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Hình ảnh</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Đơn giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Thành tiền</th>
+                            <th scope="col">Tùy chỉnh</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productResult">
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="row mt-3 w-100">
-            <div class="col-md-4" id="slider"></div>
-        </div>
-        <div class="row mt-3 w-100" id="productContent"></div>
     </div>
-    <script src=" ../owl.carousel.min.js">
-    </script>
-    <script src="./productDetails.js"></script>
+    <script src="./checkout.js"></script>
 </body>
 
 </html>
