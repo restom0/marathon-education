@@ -18,13 +18,13 @@ function loadData() {
             var categories = res.categrories;
             str = '';
             categories.forEach((el) => {
-                str += '<li><a class="dropdown-item" href="#">' + el.name + '</a></li>';
+                str += '<li><a class="dropdown-item" href="./category.html?id=' + el['id'] + '&page=1" data-id="' + el['id'] + '">' + el.name + '</a></li>';
             });
             $("#listCategory").html(str);
             var brands = res.brands;
             str = '';
             brands.forEach((el) => {
-                str += '<li><a class="dropdown-item" href="#" data-id="' + el['id'] + '">' + el.name + '</a></li>';
+                str += '<li><a class="dropdown-item" href="./brand.html?id=' + el['id'] + '&page=1" data-id="' + el['id'] + '">' + el.name + '</a></li>';
             });
             $("#listBrand").html(str);
         }

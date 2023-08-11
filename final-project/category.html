@@ -88,44 +88,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="searchItemsModalLabel">Kết quả tìm kiếm</h5>
-                    <div class="filter">
-                        <select class="form-select form-select-sm" aria-label=".form-select-sm example"
-                            id="chooseFilter">
-                            <option selected>Chọn bộ lọc</option>
-                            <option value="below">Dưới giá chọn</option>
-                            <option value="above">Trên giá chọn</option>
-                            <option value="between">Giữa giá chọn</option>
-                        </select>
-                    </div>
                 </div>
                 <div class="modal-body">
                     <div class="filter">
-                        <div id="below">
-                            <label for="filter">Giá trần: </label>
-                            <input type="text" name="filter" id="below-filter" style="height: 3.9vh;">
-                            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
-                                id="below-filterBtn">Apply</button>
-                            <br>
-                            <br>
-                        </div>
-                        <div id="above">
-                            <label for="filter">Giá sàn: </label>
-                            <input type="text" name="filter" id="above-filter" style="height: 3.9vh;">
-                            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
-                                id="above-filterBtn">Apply</button>
-                            <br>
-                            <br>
-                        </div>
-                        <div id="between">
-                            <label for="filter">Giá sàn: </label>
-                            <input type="text" name="filter" id="above-between-filter" style="height: 3.9vh;">
-                            <label for="filter">Giá trần: </label>
-                            <input type="text" name="filter" id="below-between-filter" style="height: 3.9vh;">
-                            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
-                                id="between-filterBtn">Apply</button>
-                            <br>
-                            <br>
-                        </div>
+                        <label for="filter">Phân khúc giá: </label>
+                        <input type="text" name="filter" id="filter" style="height: 3.9vh;">
+                        <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
+                            id="filterBtn">Apply</button>
+                        <br>
+                        <br>
                     </div>
                     <div class=" table-responsive">
                         <table class="table table-primary">
@@ -245,25 +216,31 @@
         </div>
     </div>
     <div class="banner">
-        <h1 class="text-center">Sản phẩm</h1>
+        <h1 class="text-center" id="title"></h1>
         <hr />
-        <!-- <div class="col-md-3">
-            <label for="filter">Phân khúc giá: </label>
-            <input type="text" name="filter" id="filter-2" style="height: 3.9vh;">
-            <button type="button" class="btn btn-outline-primary" style="margin-top: 0px;"
-                id="filterBtn-2">Apply</button>
-        </div> -->
-        <!-- <div class="col-md-9"> -->
-        <div class="row" id="resultProduct"></div>
-        <!-- </div> -->
-        <div class="row w-100 mt-3">
-            <button style="border:none;margin:10px auto" type="button" class="btn btn-outline-primary w-25"
-                id="showMoreBtn">Xem
-                thêm...</button>
-
+        <div class="row" id="resultProduct">
         </div>
+        <nav aria-label="...">
+            <ul class="pagination" style="float: right;">
+                <li class="page-item">
+                    <a class="page-link" href="#" id="prevPage">Previous</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link page" href="#" data-id="1">1</a>
+                </li>
+                <li class="page-item" aria-current="page">
+                    <a class="page-link page" href="#" data-id="2">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link page" href="#" data-id="3">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" id="nextPage">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
-    <script src="./script.js"></script>
+    <script src="./category.js"></script>
 </body>
 
 </html>

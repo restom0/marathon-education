@@ -1,40 +1,89 @@
+function addToCart() {
+    $(".addToCart").click(function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        if (!localStorage.getItem('cart') || localStorage.getItem('cart') == null) {
+            var arr = [];
+            var item = { id: id, qty: 1 };
+            arr.push(item);
+            localStorage.setItem('cart', JSON.stringify(arr));
+        }
+        else {
+            var arr = JSON.parse(localStorage.getItem('cart'));
+            var check = 0;
+            arr.forEach(el => {
+                if (el.id == id) {
+                    el.qty++;
+                    check = 1;
+                }
+            });
+            if (check == 0) {
+                var item = { id: id, qty: 1 };
+                arr.push(item);
+            }
+            localStorage.setItem('cart', JSON.stringify(arr));
+        }
+        hienThiGioHang();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Mua thành công'
+        }).then(() => {
+            window.location.reload();
+        });
+    });
+}
 function hienThiGioHang() {
     var localCart = JSON.parse(localStorage.getItem('cart'))
-    var id = [];
-    localCart.forEach(el => {
-        id.push([el.id, el.qty]);
-    });
-    $.ajax({
-        type: "GET",
-        url: host + "getCart",
-        data: {
-            apitoken: localStorage.getItem('token'),
-            id: id
-        },
-        dataType: "JSON",
-        success: function (res) {
-            var arr = [];
-            if (res.check == true) {
-                let i = 0;
-                res.result.forEach(el => {
-                    var temp = { id: el[0], name: el[1], price: el[2], images: el[3], qty: localCart[i].qty };
-                    arr.push(temp);
-                    i++;
-                });
-                localStorage.setItem('cartDetails', JSON.stringify(arr))
-            }
-        },
 
-    });
+    var id = [];
+    if (localCart != null) {
+        localCart.forEach(el => {
+            id.push([el.id, el.qty]);
+        });
+        $.ajax({
+            type: "GET",
+            url: host + "getCart",
+            data: {
+                apitoken: localStorage.getItem('token'),
+                id: id
+            },
+            dataType: "JSON",
+            success: function (res) {
+                var arr = [];
+                if (res.check == true) {
+                    let i = 0;
+                    res.result.forEach(el => {
+                        var temp = { id: el[0], name: el[1], price: el[2], images: el[3], qty: localCart[i].qty };
+                        arr.push(temp);
+                        i++;
+                    });
+                    localStorage.setItem('cartDetails', JSON.stringify(arr))
+                }
+            },
+
+        });
+    }
     var str = ``;
     var tong = 0;
     var arr = JSON.parse(localStorage.getItem('cartDetails'));
-
-    arr.forEach(item => {
-        var name = item.name;
-        var price = parseInt(item.price);
-        var count = item.qty;
-        str += `
+    if (arr != null) {
+        arr.forEach(item => {
+            var name = item.name;
+            var price = parseInt(item.price);
+            var count = item.qty;
+            str += `
         <tr class="">
             <td scope="row">`+ name + `</td>
             <td>`+ price.toLocaleString('en-US') + `đ</td>
@@ -44,9 +93,10 @@ function hienThiGioHang() {
             </td>
         </tr>
         `;
-        tong += (count * price);
+            tong += (count * price);
 
-    });
+        });
+    }
     str += `
     <tr>
         <td colspan="3"><span >Tổng cộng</span></td>
@@ -59,15 +109,6 @@ function hienThiGioHang() {
     deleteItem();
 }
 function deleteItem() {
-    // $('#deleteItems').click(function (e) {
-    //     e.preventDefault();
-    //     $("#deleteItemsModal").modal('show');
-    //     $("#cartModal").modal('hide');
-    // });
-    // $('#cancel').click(function (e) {
-    //     e.preventDefault();
-    //     $("#cartModal").modal('show');
-    // })
     $('#deleteItems').click(function (e) {
         e.preventDefault();
         var id = $(this).attr('data-id');
@@ -130,105 +171,119 @@ $(document).ready(function () {
     checkLogin();
     Login();
     Logout();
+    searchItem();
     addToCart();
     hienThiGioHang();
-    searchItem();
 });
+var max_page = 1;
 //Load san pham
 function loadData() {
-    var id = new URLSearchParams(window.location.search);
-    id = id.get('id');
+    var id = new URLSearchParams(window.location.search).get('id');
+    var page = new URLSearchParams(window.location.search).get('page');
     $.ajax({
         type: "GET",
-        url: host + "single",
-        data: {
-            apitoken: localStorage.getItem('token'),
-            id: id
-        },
+        url: host + "home",
+        data: { apitoken: localStorage.getItem('token') },
         dataType: "JSON",
         success: function (res) {
-            //Category
             var categories = res.categrories;
             str = '';
             categories.forEach((el) => {
                 str += '<li><a class="dropdown-item" href="./category.html?id=' + el['id'] + '&page=1" data-id="' + el['id'] + '">' + el.name + '</a></li>';
             });
             $("#listCategory").html(str);
-
-            //Brands
             var brands = res.brands;
             str = '';
             brands.forEach((el) => {
                 str += '<li><a class="dropdown-item" href="./brand.html?id=' + el['id'] + '&page=1" data-id="' + el['id'] + '">' + el.name + '</a></li>';
             });
             $("#listBrand").html(str);
-
-            //Product
-            var products = res.products;
-            document.getElementById("productName").innerHTML = products[0].name;
-            document.getElementById("productPrice").innerHTML = Intl.NumberFormat('en-US').format(products[0].price);
-            document.getElementById("addToCartBtn").setAttribute('data-id', products[0].id);
-            str = `<div class="owl-carousel">`;
-            res.gallery.forEach(el => {
-                str += `<div>
-                <img src="`+ el + `"/>
-                </div>`;
-            });
-            str += '</div>';
-            document.getElementById("slider").innerHTML = str;
-            $(".owl-carousel").owlCarousel();
-            document.getElementById("productContent").innerHTML = products[0].content;
-
-            // Images
-            document.getElementById("productImage").setAttribute('src', "https://students.trungthanhweb.com/images/" + products[0].images);
         },
     })
 
-}
-function addToCart() {
-    $("#addToCartBtn").click(function (e) {
-        e.preventDefault();
-        var id = $(this).attr('data-id');
-        if (!localStorage.getItem('cart') || localStorage.getItem('cart') == null) {
-            var arr = [];
-            var item = { id: id, qty: 1 };
-            arr.push(item);
-            localStorage.setItem('cart', JSON.stringify(arr));
-        }
-        else {
-            var arr = JSON.parse(localStorage.getItem('cart'));
-            var check = 0;
-            arr.forEach(el => {
-                if (el.id == id) {
-                    el.qty++;
-                    check = 1;
-                }
-            });
-            if (check == 0) {
-                var item = { id: id, qty: 1 };
-                arr.push(item);
-            }
-            localStorage.setItem('cart', JSON.stringify(arr));
-        }
-        hienThiGioHang();
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
 
-        Toast.fire({
-            icon: 'success',
-            title: 'Mua thành công'
-        }).then(() => {
-            window.location.reload();
-        });
+    $.ajax({
+        type: "GET",
+        url: host + "getCateProducts",
+        data: {
+            apitoken: localStorage.getItem('token'),
+            id: id,
+            page: page
+        },
+        dataType: "JSON",
+        success: function (res) {
+            str = `<li class="page-item">
+            <a class="page-link" href="#" id="prevPage">Previous</a>`;
+            localStorage.setItem('last_page', res.products.last_page);
+
+            for (let i = 1; i <= Number(res.products.last_page); i++) {
+                str += `<li class="page-item">
+                <a class="page-link page" href="#" data-id="`+ i + `">` + i + `</a>
+            </li>`;
+            }
+            str += `<li class="page-item">
+            <a class="page-link" href="#" id="nextPage">Next</a>
+        </li>`;
+            $('#splitPage').html(str);
+            nextPage();
+            prevPage();
+            clickPage();
+            var products = res.products.data;
+            $('#title').html(res.products.data[0].catename);
+            str = '';
+            products.forEach((el) => {
+                str += `<div class="col-md-4">
+                  <div class="product">
+                      <img class="w-60" src="https://students.trungthanhweb.com/images/`+ el['image'] + `"
+                          alt="" />
+                      <a style="text-decoration:none" href="/final-project/productDetails.html?id=`+ el['id'] + `">
+                      <h4>`+ el['name'] + `</h4></a>
+                      <p style="color: red;font-weight:bold">$ `+ el['price'] + `đ</p>
+                      <p> `+ el['brandname'] + `</p>
+                      <a href="/final-project/productDetails.html?id=`+ el['id'] + `"class="btn btn-primary chitietBtn" data-id="` + el['id'] + `">
+                          Chi tiết
+                      </a>
+                      <button class="btn btn-success addToCart" data-id="`+ el['id'] + `">
+                          Thêm
+                      </button>
+                  </div>
+              </div>`;
+            });
+            $('#resultProduct').append(str);
+            addToCart();
+        }
+    });
+}
+function clickPage() {
+    var id = new URLSearchParams(window.location.search).get('id')
+    $('.page').click(function (e) {
+        e.preventDefault();
+        var href = "./brand.html?id=" + id + "&page=" + $(this).attr('data-id');
+        location.replace(href)
+    });
+}
+function prevPage() {
+    var id = new URLSearchParams(window.location.search).get('id')
+    var page = new URLSearchParams(window.location.search).get('page');
+    if (--page == 0) {
+        $('#prevPage').hide();
+    }
+    $('#prevPage').click(function (e) {
+        e.preventDefault();
+        var href = "./brand.html?id=" + id + "&page=" + (page);
+        location.replace(href)
+    });
+}
+function nextPage() {
+    var id = new URLSearchParams(window.location.search).get('id')
+    var page = new URLSearchParams(window.location.search).get('page');
+    if (++page > Number(localStorage.getItem('last_page'))) {
+        $('#nextPage').hide();
+    }
+    $('#nextPage').click(function (e) {
+        e.preventDefault();
+        var href = "./brand.html?id=" + id + "&page=" + (page);
+        location.replace(href)
     });
 }
 function checkLogin() {
@@ -310,6 +365,7 @@ function Login() {
         e.preventDefault();
         $('#loginbtn').show();
         var email = $("#Email").val().trim();
+        localStorage.setItem('email', email);
         if (email == '') {
             const Toast = Swal.mixin({
                 toast: true,
@@ -328,7 +384,6 @@ function Login() {
                 title: 'No email'
             })
         } else {
-            localStorage.setItem('email', email);
             $.ajax({
                 type: "post",
                 url: host + "checkLoginhtml",
@@ -460,15 +515,15 @@ function searchItem() {
                             res.result.forEach((el) => {
                                 if (Number(el.price) <= Number(filterInput)) {
                                     str += `
-                    <tr class="" >
-                    <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
-                    <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                    <td>`+ el.price.toLocaleString('en-US') + `đ</td>
-                    <td>`+ el.brandname + `</td>
-                    <td>`+ el.catename + `</td>
-                    </td >
-                </tr >
-                    `;
+          <tr class="" >
+          <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
+          <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+          <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+          <td>`+ el.brandname + `</td>
+          <td>`+ el.catename + `</td>
+          </td >
+      </tr >
+          `;
                                 }
                             })
                             $('#searchResult').html(str);

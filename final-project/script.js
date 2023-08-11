@@ -260,13 +260,13 @@ function loadData() {
       var categories = res.categrories;
       str = '';
       categories.forEach((el) => {
-        str += '<li><a class="dropdown-item" href="#">' + el.name + '</a></li>';
+        str += '<li><a class="dropdown-item" href="./category.html?id=' + el['id'] + '&page=1" data-id="' + el['id'] + '">' + el.name + '</a></li>';
       });
       $("#listCategory").html(str);
       var brands = res.brands;
       str = '';
       brands.forEach((el) => {
-        str += '<li><a class="dropdown-item" href="#" data-id="' + el['id'] + '">' + el.name + '</a></li>';
+        str += '<li><a class="dropdown-item" href="./brand.html?id=' + el['id'] + '&page=1" data-id="' + el['id'] + '">' + el.name + '</a></li>';
       });
       $("#listBrand").html(str);
       var products = res.products.data;
@@ -290,6 +290,54 @@ function loadData() {
                     </button>
                 </div>
             </div>`;
+      });
+      $('#filterBtn-2').click(function (e) {
+        e.preventDefault();
+        console.log(1);
+        var filterInput = $("#filter-2").val().trim();
+
+        if (filterInput == '') {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'error',
+            title: 'Bộ lọc không khả dụng'
+          })
+        }
+        else {
+          str = '';
+          products.forEach((el) => {
+            if (Number(el.price) <= Number(filterInput)) {
+              str += `<div class="col-md-3">
+              <div class="product">
+                  <img class="w-60" src="https://students.trungthanhweb.com/images/`+ el['images'] + `"
+                      alt="" />
+                      <a style="text-decoration:none" href="/final-project/productDetails.html?id=`+ el['id'] + `">
+                  <h4>`+ el['name'] + `</h4></a>
+                  <p style="color: red;font-weight:bold">$ `+ el['price'] + `đ</p>
+                  <p> `+ el['catename'] + `</p>
+                  <p> `+ el['brandname'] + `</p>
+                  <a href="/final-project/productDetails.html?id=`+ el['id'] + `"class="btn btn-primary chitietBtn" data-id="` + el['id'] + `">
+                      Chi tiết
+                  </a>
+                  <a href="#" class="btn btn-success addToCart" data-id="`+ el['id'] + `">
+                      Thêm
+                  </a>
+              </div>
+          </div>`;
+            }
+          });
+        }
       });
       $('#resultProduct').append(str);
       showMore();
@@ -344,6 +392,7 @@ function showMore() {
                 </div>
             </div>`;
         });
+
         $('#resultProduct').append(str);
         addToCart();
       }
@@ -445,7 +494,7 @@ function Login() {
 
       Toast.fire({
         icon: 'error',
-        title: 'No email'
+        title: 'Email không khả dụng'
       })
     } else {
       $.ajax({
@@ -506,6 +555,10 @@ function Login() {
     }
   });
 }
+$('#below').hide();
+$('#above').hide();
+$('#between').hide();
+var prev_choice = null;
 function searchItem() {
   $('#searchBtn').click(function (e) {
     e.preventDefault();
@@ -525,7 +578,7 @@ function searchItem() {
 
       Toast.fire({
         icon: 'error',
-        title: 'No input'
+        title: 'Giá trị nhập không khả dụng'
       })
     }
     else {
@@ -538,25 +591,33 @@ function searchItem() {
         },
         dataType: "JSON",
         success: function (res) {
-          console.log(res);
           var str = ``;
           res.result.forEach((el) => {
             str += `
-      <tr class="">
-          <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
-          <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-          <td>`+ el.price.toLocaleString('en-US') + `đ</td>
-          <td>`+ el.brandname + `</td>
-          <td>`+ el.catename + `</td>
-          </td>
-      </tr>
-      `;
+<tr class="">
+    <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
+    <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+    <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+    <td>`+ el.brandname + `</td>
+    <td>`+ el.catename + `</td>
+    </td>
+</tr>
+`;
           })
           $('#searchResult').html(str);
-          $('#filterBtn').click(function (e) {
+          $('#chooseFilter').click(function (e) {
             e.preventDefault();
-            var filterInput = $("#filter").val().trim();
-
+            var cur_choice = $(this).val();
+            if (prev_choice) {
+              $('#' + prev_choice).hide();
+            }
+            $('#' + cur_choice).show();
+            prev_choice = cur_choice;
+          });
+          $('#below-filterBtn').click(function (e) {
+            e.preventDefault();
+            var filterInput = $("#below-filter").val().trim();
+            console.log(Number(filterInput));
             if (filterInput == '') {
               const Toast = Swal.mixin({
                 toast: true,
@@ -580,15 +641,98 @@ function searchItem() {
               res.result.forEach((el) => {
                 if (Number(el.price) <= Number(filterInput)) {
                   str += `
-        <tr class="" >
-        <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
-        <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-        <td>`+ el.price.toLocaleString('en-US') + `đ</td>
-        <td>`+ el.brandname + `</td>
-        <td>`+ el.catename + `</td>
-        </td >
-    </tr >
-        `;
+                  <tr class="">
+                      <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
+                      <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.brandname + `</td>
+                      <td>`+ el.catename + `</td>
+                      </td>
+                  </tr>
+                  `;
+                }
+              })
+              $('#searchResult').html(str);
+            }
+          });
+          $('#above-filterBtn').click(function (e) {
+            e.preventDefault();
+            var filterInput = $("#above-filter").val().trim();
+            if (filterInput == '') {
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: 'Input không khả dụng'
+              })
+            }
+            else {
+              str = '';
+              res.result.forEach((el) => {
+                if (Number(el.price) >= Number(filterInput)) {
+                  str += `
+                  <tr class="">
+                      <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
+                      <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.brandname + `</td>
+                      <td>`+ el.catename + `</td>
+                      </td>
+                  </tr>
+                  `;
+                }
+              })
+              $('#searchResult').html(str);
+            }
+          });
+          $('#between-filterBtn').click(function (e) {
+            e.preventDefault();
+            var belowfilterInput = $("#below-between-filter").val().trim();
+            var abovefilterInput = $("#above-between-filter").val().trim();
+            console.log(belowfilterInput);
+            console.log(abovefilterInput);
+            if (belowfilterInput == '' || abovefilterInput == '') {
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'error',
+                title: 'Input không khả dụng'
+              })
+            }
+            else {
+              str = '';
+              res.result.forEach((el) => {
+                if (Number(el.price) >= Number(abovefilterInput) && Number(el.price) <= Number(belowfilterInput)) {
+                  str += `
+                  <tr class="">
+                      <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
+                      <td><a style="text-decoration:none;color:blue;text-weight:bold" href="/final-project/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
+                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.brandname + `</td>
+                      <td>`+ el.catename + `</td>
+                      </td>
+                  </tr>
+                  `;
                 }
               })
               $('#searchResult').html(str);
