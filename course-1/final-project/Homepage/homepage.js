@@ -270,7 +270,7 @@ function loadData() {
                         alt="" />
                     <a style="text-decoration:none" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">
                     <h4>`+ el['name'] + `</h4></a>
-                    <p style="color: red;font-weight:bold">$ `+ el['price'] + `đ</p>
+                    <p style="color: red;font-weight:bold">`+ el['price'].toLocaleString('en-US') + ` đ</p>
                     <p> `+ el['catename'] + `</p>
                     <p> `+ el['brandname'] + `</p>
                     <a href="../Productdetails/productDetails.html?id=`+ el['id'] + `"class="btn btn-primary chitietBtn" data-id="` + el['id'] + `">
@@ -315,7 +315,7 @@ function loadData() {
                       alt="" />
                       <a style="text-decoration:none" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">
                   <h4>`+ el['name'] + `</h4></a>
-                  <p style="color: red;font-weight:bold">$ `+ el['price'] + `đ</p>
+                  <p style="color: red;font-weight:bold">`+ el['price'].toLocaleString('en-US') + ` đ</p>
                   <p> `+ el['catename'] + `</p>
                   <p> `+ el['brandname'] + `</p>
                   <a href="../Productdetails/productDetails.html?id=`+ el['id'] + `"class="btn btn-primary chitietBtn" data-id="` + el['id'] + `">
@@ -365,7 +365,7 @@ function showMore() {
                         alt="" />
                         <a style="text-decoration:none" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">
                     <h4>`+ el['name'] + `</h4></a>
-                    <p style="color: red;font-weight:bold">$ `+ el['price'] + `đ</p>
+                    <p style="color: red;font-weight:bold">`+ el['price'].toLocaleString('en-US') + ` đ</p>
                     <p> `+ el['catename'] + `</p>
                     <p> `+ el['brandname'] + `</p>
                     <a href="../Productdetails/productDetails.html?id=`+ el['id'] + `"class="btn btn-primary chitietBtn" data-id="` + el['id'] + `">
@@ -473,10 +473,10 @@ function loadCart() {
       str += `
           <tr class="" >
           <td scope="row"><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-          <td>`+ parseInt(el.price).toLocaleString('en-US') + `đ</td>
+          <td>`+ parseInt(el.price).toLocaleString('en-US') + ` đ</td>
           <td>`+ el.qty + `</td>
-          <td>`+ (parseInt(el.price) * el.qty).toLocaleString('en-US') + `đ</td>
-          <td><button type="button" class="btn-sm btn-danger danger" id="deleteItems" data-id="`+ parseInt(el.id) + `">Xóa</button>
+          <td>`+ (parseInt(el.price) * el.qty).toLocaleString('en-US') + ` đ</td>
+          <td><button type="button" class="btn-sm btn-danger danger deleteItems"data-id="`+ parseInt(el.id) + `">Xóa</button>
           </td>
       </tr >
           `;
@@ -486,7 +486,7 @@ function loadCart() {
   str += `
           <tr >
       <td colspan="3"><span >Tổng cộng</span></td>
-      <td>`+ tong.toLocaleString('en-US') + `</td>
+      <td>`+ tong.toLocaleString('en-US') + ` đ</td>
       <td></td>
   </tr>
           `;
@@ -506,7 +506,7 @@ function deleteItem() {
   //     e.preventDefault();
   //     $("#cartModal").modal('show');
   // })
-  $('#deleteItems').click(function (e) {
+  $('.deleteItems').click(function (e) {
     e.preventDefault();
     var id = $(this).attr('data-id');
     const swalWithBootstrapButtons = Swal.mixin({
@@ -555,7 +555,6 @@ function deleteItem() {
       ) {
         swalWithBootstrapButtons.fire(
           'Đã hủy bỏ',
-          'error'
         )
       }
     })
@@ -600,18 +599,31 @@ function searchItem() {
         dataType: "JSON",
         success: function (res) {
           var str = ``;
-          res.result.forEach((el) => {
-            str += `
+          if (res.result.length == 0) {
+            $('#chooseFilter').attr('disabled', 'disabled');
+            str = `
+                    <tr>
+                    <td></td>
+                    <td></td>
+                    <td><p class='text-center'>Không có kết quả tìm kiếm</p></td>
+                    <td></td>
+                    <td></td>
+                    </tr>`
+          }
+          else {
+            res.result.forEach((el) => {
+              str += `
 <tr class="">
     <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
     <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-    <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+    <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
     <td>`+ el.brandname + `</td>
     <td>`+ el.catename + `</td>
     </td>
 </tr>
 `;
-          })
+            })
+          }
           $('#searchResult').html(str);
           $('#chooseFilter').click(function (e) {
             e.preventDefault();
@@ -652,7 +664,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
@@ -692,7 +704,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
@@ -735,7 +747,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>

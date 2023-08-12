@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Thương hiệu</title>
     <!-- CSS riêng -->
     <link rel="stylesheet" href="../Homepage/homepage.css">
 
@@ -66,13 +66,19 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="loginModalLabel">Login form</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label for="Email" id="label-email">Email</label>
-                    <input type="text" placeholder="abcxyz@gmail.com" name="" id="Email" style="width:100%">
-                    <label for="Email" id="label-API">API </label>
-                    <input type="text" name="" id="API" style="width:100%">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1" id="label-email">Email</span>
+                        <input type="text" class="form-control" placeholder="abcxyz@gmail.com" aria-label="Username"
+                            id="Email" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3" id="label-API">
+                        <span class="input-group-text" id="basic-addon2">API</span>
+                        <input type="text" class="form-control" aria-label="Username" id="API"
+                            aria-describedby="basic-addon2">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -253,6 +259,19 @@
             <ul class="pagination" style="float: right;" id="splitPage">
             </ul>
         </nav>
+    </div>
+    <div class="footer" style="margin-top: 10vh;">
+        <div class="row bg-dark">
+            <div class="col-md-8 text-center" style="height: 30vh;">
+                <p class="text-light text-bold" style="font-size:30pt;margin-top:20vh">Project của @Thái Ngọc Rạng</p>
+            </div>
+            <div class="col-md-4" style="text-align: right;">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125416.29258233657!2d106.6054413070929!3d10.79145350168102!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529bb1d45be4f%3A0xd12fc501f18409fb!2sCellphoneS!5e0!3m2!1svi!2s!4v1691809483418!5m2!1svi!2s"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
     </div>
     <script src="./brand.js"></script>
 </body>

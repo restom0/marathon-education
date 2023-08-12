@@ -206,7 +206,17 @@ function loadData() {
         },
         dataType: "JSON",
         success: function (res) {
-            str = `
+            if (res.products.data.length == 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Hiện tại trang đang bảo trì!',
+                }).then(() => {
+                    window.location.replace("../Homepage/homepage.html")
+                });
+            }
+            else {
+                str = `
             <li class="page-item">
                 <a class="page-link" href="#" id="firstPage">
                 <span aria-hidden="true">&laquo;</span>
@@ -215,14 +225,14 @@ function loadData() {
             <li class="page-item">
                 <a class="page-link" href="#" id="prevPage">Previous</a>
             </li>`;
-            localStorage.setItem('last_page', res.products.last_page);
+                localStorage.setItem('last_page', res.products.last_page);
 
-            for (let i = 1; i <= Number(res.products.last_page); i++) {
-                str += `<li class="page-item">
+                for (let i = 1; i <= Number(res.products.last_page); i++) {
+                    str += `<li class="page-item">
                 <a class="page-link page" href="#" data-id="`+ i + `">` + i + `</a>
             </li>`;
-            }
-            str += `
+                }
+                str += `
             <li class="page-item">
                 <a class="page-link" href="#" id="nextPage">Next</a>
             </li>
@@ -231,23 +241,23 @@ function loadData() {
                 <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>`;
-            $('#splitPage').html(str);
-            nextPage();
-            prevPage();
-            clickPage();
-            firstPage();
-            lastPage();
-            var products = res.products.data;
-            $('#title').html(res.products.data[0].catename);
-            str = '';
-            products.forEach((el) => {
-                str += `<div class="col-md-4">
+                $('#splitPage').html(str);
+                nextPage();
+                prevPage();
+                clickPage();
+                firstPage();
+                lastPage();
+                var products = res.products.data;
+                $('#title').html(res.products.data[0].catename);
+                str = '';
+                products.forEach((el) => {
+                    str += `<div class="col-md-4">
                   <div class="product">
                       <img class="w-60" src="https://students.trungthanhweb.com/images/`+ el['image'] + `"
                           alt="" />
                       <a style="text-decoration:none" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">
                       <h4>`+ el['name'] + `</h4></a>
-                      <p style="color: red;font-weight:bold">$ `+ el['price'] + `đ</p>
+                      <p style="color: red;font-weight:bold">$ `+ el['price'].toLocaleString('en-US') + ` đ</p>
                       <p> `+ el['brandname'] + `</p>
                       <a href="../Productdetails/productDetails.html?id=`+ el['id'] + `"class="btn btn-primary chitietBtn" data-id="` + el['id'] + `">
                           Chi tiết
@@ -257,9 +267,10 @@ function loadData() {
                       </button>
                   </div>
               </div>`;
-            });
-            $('#resultProduct').append(str);
-            addToCart();
+                });
+                $('#resultProduct').append(str);
+                addToCart();
+            }
         }
     });
 }
@@ -417,10 +428,10 @@ function loadCart() {
             str += `
             <tr class="" >
             <td scope="row"><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-            <td>`+ parseInt(el.price).toLocaleString('en-US') + `đ</td>
+            <td>`+ parseInt(el.price).toLocaleString('en-US') + ` đ</td>
             <td>`+ el.qty + `</td>
-            <td>`+ (parseInt(el.price) * el.qty).toLocaleString('en-US') + `đ</td>
-            <td><button type="button" class="btn-sm btn-danger danger" id="deleteItems" data-id="`+ parseInt(el.id) + `">Xóa</button>
+            <td>`+ (parseInt(el.price) * el.qty).toLocaleString('en-US') + ` đ</td>
+            <td><button type="button" class="btn-sm btn-danger danger deleteItems" data-id="`+ parseInt(el.id) + `">Xóa</button>
             </td>
         </tr >
             `;
@@ -430,7 +441,7 @@ function loadCart() {
     str += `
             <tr >
         <td colspan="3"><span >Tổng cộng</span></td>
-        <td>`+ tong.toLocaleString('en-US') + `</td>
+        <td>`+ tong.toLocaleString('en-US') + ` đ</td>
         <td></td>
     </tr>
             `;
@@ -441,7 +452,7 @@ function loadCart() {
 
 //Xóa khỏi giỏ hàng
 function deleteItem() {
-    $('#deleteItems').click(function (e) {
+    $('.deleteItems').click(function (e) {
         e.preventDefault();
         var id = $(this).attr('data-id');
         const swalWithBootstrapButtons = Swal.mixin({
@@ -489,8 +500,7 @@ function deleteItem() {
                 result.dismiss === Swal.DismissReason.cancel
             ) {
                 swalWithBootstrapButtons.fire(
-                    'Đã hủy bỏ',
-                    'error'
+                    'Đã hủy bỏ'
                 )
             }
         })
@@ -535,18 +545,31 @@ function searchItem() {
                 dataType: "JSON",
                 success: function (res) {
                     var str = ``;
-                    res.result.forEach((el) => {
-                        str += `
+                    if (res.result.length == 0) {
+                        $('#chooseFilter').attr('disabled', 'disabled');
+                        str = `
+                                <tr>
+                                <td></td>
+                                <td></td>
+                                <td><p class='text-center'>Không có kết quả tìm kiếm</p></td>
+                                <td></td>
+                                <td></td>
+                                </tr>`
+                    }
+                    else {
+                        res.result.forEach((el) => {
+                            str += `
 <tr class="">
     <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
     <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-    <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+    <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
     <td>`+ el.brandname + `</td>
     <td>`+ el.catename + `</td>
     </td>
 </tr>
 `;
-                    })
+                        });
+                    }
                     $('#searchResult').html(str);
                     $('#chooseFilter').click(function (e) {
                         e.preventDefault();
@@ -587,7 +610,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
@@ -627,7 +650,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
@@ -670,7 +693,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>

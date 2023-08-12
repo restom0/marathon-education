@@ -201,7 +201,7 @@ function loadData() {
             //Product
             var products = res.products;
             document.getElementById("productName").innerHTML = products[0].name;
-            document.getElementById("productPrice").innerHTML = Intl.NumberFormat('en-US').format(products[0].price);
+            document.getElementById("productPrice").innerHTML = (products[0].price.toLocaleString('en-US') + ' đ');
             document.getElementById("addToCartBtn").setAttribute('data-id', products[0].id);
             str = `<div class="owl-carousel">`;
             res.gallery.forEach(el => {
@@ -213,9 +213,12 @@ function loadData() {
             document.getElementById("slider").innerHTML = str;
             $(".owl-carousel").owlCarousel();
             document.getElementById("productContent").innerHTML = products[0].content;
-
             // Images
             document.getElementById("productImage").setAttribute('src', "https://students.trungthanhweb.com/images/" + products[0].images);
+            $('#productImage').click(function (e) {
+                e.preventDefault();
+                document.getElementById("productImage").setAttribute('src', res.gallery[Math.round(Math.random() * 5)]);
+            });
         },
     })
 
@@ -308,10 +311,10 @@ function loadCart() {
             str += `
             <tr class="" >
             <td scope="row"><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-            <td>`+ parseInt(el.price).toLocaleString('en-US') + `đ</td>
+            <td>`+ parseInt(el.price).toLocaleString('en-US') + ` đ</td>
             <td>`+ el.qty + `</td>
-            <td>`+ (parseInt(el.price) * el.qty).toLocaleString('en-US') + `đ</td>
-            <td><button type="button" class="btn-sm btn-danger danger" id="deleteItems" data-id="`+ parseInt(el.id) + `">Xóa</button>
+            <td>`+ (parseInt(el.price) * el.qty).toLocaleString('en-US') + ` đ</td>
+            <td><button type="button" class="btn-sm btn-danger danger deleteItems" data-id="`+ parseInt(el.id) + `">Xóa</button>
             </td>
         </tr >
             `;
@@ -321,7 +324,7 @@ function loadCart() {
     str += `
             <tr >
         <td colspan="3"><span >Tổng cộng</span></td>
-        <td>`+ tong.toLocaleString('en-US') + `</td>
+        <td>`+ tong.toLocaleString('en-US') + ` đ</td>
         <td></td>
     </tr>
             `;
@@ -341,7 +344,7 @@ function deleteItem() {
     //     e.preventDefault();
     //     $("#cartModal").modal('show');
     // })
-    $('#deleteItems').click(function (e) {
+    $('.deleteItems').click(function (e) {
         e.preventDefault();
         var id = $(this).attr('data-id');
         const swalWithBootstrapButtons = Swal.mixin({
@@ -435,18 +438,31 @@ function searchItem() {
                 dataType: "JSON",
                 success: function (res) {
                     var str = ``;
-                    res.result.forEach((el) => {
-                        str += `
+                    if (res.result.length == 0) {
+                        $('#chooseFilter').attr('disabled', 'disabled');
+                        str = `
+                                <tr>
+                                <td></td>
+                                <td></td>
+                                <td><p class='text-center'>Không có kết quả tìm kiếm</p></td>
+                                <td></td>
+                                <td></td>
+                                </tr>`
+                    }
+                    else {
+                        res.result.forEach((el) => {
+                            str += `
 <tr class="">
     <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
     <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-    <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+    <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
     <td>`+ el.brandname + `</td>
     <td>`+ el.catename + `</td>
     </td>
 </tr>
 `;
-                    })
+                        })
+                    };
                     $('#searchResult').html(str);
                     $('#chooseFilter').click(function (e) {
                         e.preventDefault();
@@ -460,7 +476,6 @@ function searchItem() {
                     $('#below-filterBtn').click(function (e) {
                         e.preventDefault();
                         var filterInput = $("#below-filter").val().trim();
-                        console.log(Number(filterInput));
                         if (filterInput == '') {
                             const Toast = Swal.mixin({
                                 toast: true,
@@ -487,7 +502,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
@@ -527,7 +542,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
@@ -542,8 +557,6 @@ function searchItem() {
                         e.preventDefault();
                         var belowfilterInput = $("#below-between-filter").val().trim();
                         var abovefilterInput = $("#above-between-filter").val().trim();
-                        console.log(belowfilterInput);
-                        console.log(abovefilterInput);
                         if (belowfilterInput == '' || abovefilterInput == '') {
                             const Toast = Swal.mixin({
                                 toast: true,
@@ -570,7 +583,7 @@ function searchItem() {
                   <tr class="">
                       <td style=" width:20%"><img style=" width:50%" src="https://students.trungthanhweb.com/images/`+ el.image + `"/></td>
                       <td><a style="text-decoration:none;color:blue;text-weight:bold" href="../Productdetails/productDetails.html?id=`+ el['id'] + `">` + el.name + `</a></td>
-                      <td>`+ el.price.toLocaleString('en-US') + `đ</td>
+                      <td>`+ el.price.toLocaleString('en-US') + ` đ</td>
                       <td>`+ el.brandname + `</td>
                       <td>`+ el.catename + `</td>
                       </td>
