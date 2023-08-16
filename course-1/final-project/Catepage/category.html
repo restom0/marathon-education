@@ -50,7 +50,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -61,11 +60,12 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Login form</h5>
+                    <h5 class="modal-title" id="loginModalLabel">Đăng nhập</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -88,6 +88,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="searchItemsModal" tabindex="-1" aria-labelledby="searchItemsModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -155,6 +156,103 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="createBill" tabindex="-1" aria-labelledby="createBillLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createBillLabel">Xác nhận thanh toán</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Họ và tên</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" id="billName"
+                            placeholder="Nguyễn Văn A" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Số điện thoại</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" id="billPhone"
+                            placeholder="0912345678" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Địa chỉ</span>
+                        <input type="text" class="form-control" aria-label="Sizing example input" id="billAddress"
+                            placeholder="Khu phố 1, Phường 1, Quận 1, Thành phố Hồ Chí Minh "
+                            aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="confirm">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="billModal" tabindex="-1" aria-labelledby="billModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="billModalLabel">Lịch sử mua hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Ngày tạo đơn</th>
+                                    <th scope="col">Tùy chỉnh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logResult">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="billDetailModal" tabindex="-1" aria-labelledby="billDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="billDetailModalLabel">Chi tiết mua hàng</h5>
+                    <button type="button" class="btn-close toggle" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailResult">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary toggle" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <img src="https://yt3.googleusercontent.com/KExMKZqWdtVxdDxZaVzQ_xZhE81AviwRDmmZpwveNExBqOwyjmTMUXIhj-lv63sVdUg0TdrhGQ=s900-c-k-c0x00ffffff-no-rj"
@@ -170,29 +268,41 @@
                         <a class="nav-link active" aria-current="page" href="../Homepage/homepage.html">Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle nav-link active" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Loại sản phẩm
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="listCategory">
-                        </ul>
-
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="listCategory"></ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Thương hiệu
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="listBrand">
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
-                            id="login">Login</a>
+                    <li class="nav-item dropdown" id="account">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class='bx bxs-user'></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#loginModal">Tài khoản</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#billModal"
+                                    id="loadBillBtn">Lịch
+                                    sử mua hàng</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="loginModal"
+                                    id="logoutbtn">Logout</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="loginModal"
-                            id="logoutbtn">Logout</a>
+                        <a class="nav-link active" href="#" data-bs-toggle="modal" data-bs-target="#loginModal"
+                            id="login">Login</a>
                     </li>
                 </ul>
                 <form class="d-flex">
@@ -201,7 +311,7 @@
                     <button class="btn btn-outline-success" type="button" data-bs-toggle="modal"
                         data-bs-target="#searchItemsModal" id="searchBtn">Search</button>
                     <button style="margin-left: 2%;" class="btn btn-primary" type="button" data-bs-toggle="modal"
-                        data-bs-target="#cartModal"><i class='bx bx-cart-alt'></i></button>
+                        data-bs-target="#cartModal" id="showCart"><i class='bx bx-cart-alt'></i></button>
                 </form>
             </div>
         </div>
@@ -274,6 +384,7 @@
         </div>
     </div>
     <script src="./category.js"></script>
+    <script src="../Modules/Module.js"></script>
 </body>
 
 </html>
