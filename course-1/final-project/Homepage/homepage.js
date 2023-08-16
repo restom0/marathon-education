@@ -119,9 +119,7 @@ function loadData() {
       });
       $('#filterBtn-2').click(function (e) {
         e.preventDefault();
-        console.log(1);
         var filterInput = $("#filter-2").val().trim();
-
         if (filterInput == '') {
           const Toast = Swal.mixin({
             toast: true,

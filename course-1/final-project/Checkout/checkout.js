@@ -58,7 +58,6 @@ function loadData() {
             `;
     $('#productResult').append(str);
     deleteItem();
-
 }
 
 //Thanh toán
@@ -134,7 +133,7 @@ function createBill() {
                                             localStorage.removeItem('cart');
                                             localStorage.removeItem('cartDetails');
                                             localStorage.removeItem('contact');
-                                            window.location.reload();
+                                            window.location.replace('../Homepage/homepage.html');
                                         })
                                     }
                                     else {

@@ -181,7 +181,6 @@ function billDetails() {
             },
             dataType: "JSON",
             success: function (res) {
-                console.log(res)
                 if (res.check == true) {
                     str = ``;
                     res.result.forEach(el => {
@@ -406,8 +405,6 @@ function searchItem() {
                         e.preventDefault();
                         var belowfilterInput = $("#below-between-filter").val().trim();
                         var abovefilterInput = $("#above-between-filter").val().trim();
-                        console.log(belowfilterInput);
-                        console.log(abovefilterInput);
                         if (belowfilterInput == '' || abovefilterInput == '') {
 
                             Toast.fire({
@@ -442,6 +439,50 @@ function searchItem() {
 
 //Thêm vào giỏ hàng
 function addToCart() {
+    $("#addToCartBtn").click(function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        if (!localStorage.getItem('cart') || localStorage.getItem('cart') == null) {
+            var arr = [];
+            var item = { id: id, qty: 1 };
+            arr.push(item);
+            localStorage.setItem('cart', JSON.stringify(arr));
+        }
+        else {
+            var arr = JSON.parse(localStorage.getItem('cart'));
+            var check = 0;
+            arr.forEach(el => {
+                if (el.id == id) {
+                    el.qty++;
+                    check = 1;
+                }
+            });
+            if (check == 0) {
+                var item = { id: id, qty: 1 };
+                arr.push(item);
+            }
+            localStorage.setItem('cart', JSON.stringify(arr));
+        }
+        loadCart();
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: 'Mua thành công'
+        }).then(() => {
+            window.location.reload();
+        })
+    });
     $(".addToCart").click(function (e) {
         e.preventDefault();
         var id = $(this).attr('data-id');
@@ -482,6 +523,8 @@ function addToCart() {
         Toast.fire({
             icon: 'success',
             title: 'Mua thành công'
+        }).then(() => {
+            window.location.reload();
         })
     });
 }
