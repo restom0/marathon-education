@@ -35,10 +35,11 @@ function loadData() {
             document.getElementById("productName").innerHTML = products[0].name;
             document.getElementById("productPrice").innerHTML = (products[0].price.toLocaleString('en-US') + ' đ');
             document.getElementById("addToCartBtn").setAttribute('data-id', products[0].id);
+            var key = 0;
             str = `<div class="owl-carousel">`;
             res.gallery.forEach(el => {
                 str += `<div>
-                <img src="`+ el + `"/>
+                <img class="select" data-id=` + (key++) + ` src="` + el + `"/>
                 </div>`;
             });
             str += '</div>';
@@ -50,6 +51,10 @@ function loadData() {
             $('#productImage').click(function (e) {
                 e.preventDefault();
                 document.getElementById("productImage").setAttribute('src', res.gallery[Math.round(Math.random() * 5)]);
+            });
+            $('.select').click(function (e) {
+                e.preventDefault();
+                document.getElementById("productImage").setAttribute('src', res.gallery[Number($(this).attr('data-id'))]);
             });
         },
     })
