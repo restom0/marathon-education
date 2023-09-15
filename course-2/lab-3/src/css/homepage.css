@@ -1,0 +1,36 @@
+.carousel-inner>img {
+    height: 30vh;
+    margin: 10px auto;
+}
+
+.banner {
+    width: 90%;
+    margin: 10px auto;
+}
+
+.product>img {
+    margin: 20px auto;
+    height: 35vh;
+}
+
+.product {
+    margin: 10px auto;
+    padding-bottom: 10px;
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 2%;
+}
+
+.product.product2:hover {
+    box-shadow: 5px 5px 10px;
+    transition: 1s ease;
+}
+
+.btn.btn-primary:hover {
+    color: blue;
+    background-color: white;
+}
+
+#resultProduct {
+    transition: ease-in-out .5s;
+}

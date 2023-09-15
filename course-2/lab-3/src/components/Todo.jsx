@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Container from 'react-bootstrap/Container';
 import Swal from "sweetalert2";
-import { addTask, selectTask, editTask, finishTask, deleteTaskSlice } from "../redux/todoSlide";
+import { addTask, selectTask, editTask, finishTask, deleteTaskSlice } from "../redux/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function Todo(props) {

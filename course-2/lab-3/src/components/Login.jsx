@@ -2,12 +2,15 @@ import React, { useState } from 'react'
 import Swal from 'sweetalert2';
 import "../css/login.css"
 function Login() {
+    if (localStorage.getItem('token') || localStorage.getItem('token') != null) {
+        window.location.replace('/home');
+    }
     const [email, setEmail] = useState('');
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
-        timer: 3000,
+        timer: 1500,
         timerProgressBar: true,
         didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -25,10 +28,10 @@ function Login() {
         else {
             var data = new URLSearchParams();
             data.append('email', email);
-
+            localStorage.setItem('email', email);
             fetch('https://students.trungthanhweb.com/api/checkLoginhtml', {
                 method: 'POST',
-                headers:{"Content-Type": 'application/x-www-form-urlencoded'},
+                headers: { "Content-Type": 'application/x-www-form-urlencoded' },
                 body: data
             }).then(res => res.json()).then((res) => {
                 if (res.check === true) {
@@ -36,6 +39,8 @@ function Login() {
                     Toast.fire({
                         icon: 'success',
                         title: 'Đăng nhập thành công'
+                    }).then(() => {
+                        window.location.replace("/home");
                     })
                 }
                 else {
