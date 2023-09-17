@@ -10,18 +10,18 @@ export const billSlice = createSlice({
     name: 'bill',
     initialState: {
         bill: [],
-        loading2: false,
+        loading: false,
     },
     extraReducers: {
         [getBill.pending]: (state, action) => {
-            state.loading2 = true;
+            state.loading = true;
         },
         [getBill.fulfilled]: (state, action) => {
-            state.loading2 = false;
+            state.loading = false;
             state.bill = action.payload.result;
         },
         [getBill.rejected]: (state, action) => {
-            state.loading2 = false;
+            state.loading = false;
         },
     }
 })

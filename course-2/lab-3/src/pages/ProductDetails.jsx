@@ -1,11 +1,13 @@
 import React from 'react';
+
 import Navbar1 from '../components/Navbar';
-import Footer1 from '../components/Footer';
 import ProductDetail from '../components/ProductDetail';
-function ProductDetails(props) {
+import Footer1 from '../components/Footer';
+
+function ProductDetails() {
   return (
     <div>
-      <Navbar1 name={props.name} />
+      <Navbar1 />
       <ProductDetail />
       <Footer1 />
     </div>

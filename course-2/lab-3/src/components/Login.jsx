@@ -5,7 +5,7 @@ function Login() {
     if (localStorage.getItem('token') || localStorage.getItem('token') != null) {
         window.location.replace('/home');
     }
-    const [email, setEmail] = useState('');
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -17,6 +17,8 @@ function Login() {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+
+    const [email, setEmail] = useState('');
 
     const checkLogin = () => {
         if (!email || email === '') {
@@ -52,17 +54,16 @@ function Login() {
             });
         }
     }
+
     return (
-        <div>
-            <div className="wrapper">
-                <div className="container1 p-2">
-                    <div className="col-md-3">
-                        <img src="" alt="" className="w-100" />
-                    </div>
-                    <div className="mb-3">
-                        <input type="email" className="form-control" id="exampleInputEmail1" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" />
-                        <button type="submit" className="btn btn-primary" onClick={checkLogin}>Submit</button>
-                    </div>
+        <div className="wrapper">
+            <div className="container1 p-2">
+                <div className="col-md-3">
+                    <img src="" alt="" className="w-100" />
+                </div>
+                <div className="mb-3">
+                    <input type="email" className="form-control" id="exampleInputEmail1" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" />
+                    <button type="submit" className="btn btn-primary" onClick={checkLogin}>Submit</button>
                 </div>
             </div>
         </div>

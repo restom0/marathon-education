@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { Button, Col, Row } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
+
 import { getProducts, updateProducts } from '../redux/productSlice';
 
 function Product() {
@@ -20,12 +21,16 @@ function Product() {
     })
 
     const dispatch = useDispatch();
+
     const { products, loading } = useSelector((state) => state.product);
+
     const [page, setPage] = useState(2);
     const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         dispatch(getProducts());
     }, [dispatch])
+
     const loadProduct = products.data && products.data.map((el, index) =>
         <Col className="col-md-3 text-center" key={index} >
             <div className="product product2">
@@ -39,16 +44,12 @@ function Product() {
                 <p style={{ color: "red", fontWeight: "bold" }}>{parseInt(el['price']).toLocaleString('en-US')} đ</p>
                 <p>{el['catename']}</p>
                 <p>{el['brandname']}</p>
-                <Button href={"/productDetails?id=" + el['id']} className="btn btn-primary me-2" size='lg' data-id={el['id']} >
-                    Chi tiết
-                </Button>
-                <Button className="btn btn-success ms-2" size='lg' onClick={() => addToCart(parseInt(el['id']))}>
-                    Thêm
-                </Button>
+                <Button href={"/productDetails?id=" + el['id']} className="me-2" variant='primary' size='lg'>Chi tiết</Button>
+                <Button className="ms-2" variant='success' size='lg' onClick={() => addToCart(parseInt(el['id']))}>Thêm</Button>
             </div>
         </Col>
-
     )
+
     const addToCart = (id) => {
         var arr = [];
         if (!localStorage.getItem('cart') || localStorage.getItem('cart') == null) {
@@ -57,7 +58,7 @@ function Product() {
             localStorage.setItem('cart', JSON.stringify(arr));
         }
         else {
-            var arr = JSON.parse(localStorage.getItem('cart'));
+            arr = JSON.parse(localStorage.getItem('cart'));
             var check = 0;
             arr.forEach(el => {
                 if (el.id === id) {
@@ -66,12 +67,11 @@ function Product() {
                 }
             });
             if (check === 0) {
-                var item = { id: id, qty: 1 };
+                item = { id: id, qty: 1 };
                 arr.push(item);
             }
             localStorage.setItem('cart', JSON.stringify(arr));
         }
-        // loadCart();
         Toast.fire({
             icon: 'success',
             title: 'Mua thành công'
@@ -79,6 +79,7 @@ function Product() {
             window.location.reload();
         })
     }
+
     const showMore = () => {
         setPage(page + 1);
         if (page > products.last_page) {
@@ -92,20 +93,18 @@ function Product() {
             dispatch(updateProducts(newProducts));
         })
     }
+
     return (
         <div>
             <div>
                 <h1 className='text-center'>Sản phẩm</h1>
-                <Row>
-                    {loadProduct}
-                </Row>
+                <Row>{loadProduct}</Row>
             </div>
             <div className="row w-100 mt-3">
-                <button style={{ border: "none", margin: "30px auto" }} type="button" className="btn btn-outline-primary w-25"
-                    onClick={() => showMore()} disabled={isLoading}>{isLoading ? "" : "Xem thêm..."}</button>
-
+                <Button style={{ border: "none", margin: "30px auto" }} className="w-25" variant='outline-primary' onClick={() => showMore()} disabled={isLoading}>{isLoading ? "" : "Xem thêm..."}</Button>
             </div>
         </div>
     )
 };
+
 export default Product

@@ -10,7 +10,7 @@ export const cartSlice = createSlice({
     name: 'carts',
     initialState: {
         carts: [],
-        loading2: false,
+        loading: false,
         count: 0,
     },
     reducers: {
@@ -29,14 +29,14 @@ export const cartSlice = createSlice({
     },
     extraReducers: {
         [getCarts.pending]: (state, action) => {
-            state.loading2 = true;
+            state.loading = true;
         },
         [getCarts.fulfilled]: (state, action) => {
-            state.loading2 = false;
+            state.loading = false;
             state.carts = action.payload.result;
         },
         [getCarts.rejected]: (state, action) => {
-            state.loading2 = false;
+            state.loading = false;
         }
     }
 })

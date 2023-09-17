@@ -1,14 +1,16 @@
 import React from 'react';
+
 import '../css/homepage.css'
+
 import Navbar1 from '../components/Navbar';
-import Footer1 from '../components/Footer';
 import Carousel1 from '../components/Carousel1';
 import Product from '../components/Product';
+import Footer1 from '../components/Footer';
 
-function Homepage(props) {
+function Homepage() {
   return (
     <div>
-      <Navbar1 name={props.name} />
+      <Navbar1 />
       <Carousel1 />
       <Product />
       <Footer1 />

@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import taskReducer from './todoSlice';
 import cateReducer from "./cateSlice";
 import brandReducer from "./brandSlice";
@@ -8,6 +9,7 @@ import cateProductReducer from "./cateProductSlice";
 import brandProductReducer from "./brandProductSlice";
 import billsReducer from "./billsSlice";
 import billReducer from "./billSlice";
+
 export const store = configureStore({
     reducer: {
         task: taskReducer,

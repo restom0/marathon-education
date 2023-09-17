@@ -19,20 +19,11 @@ import { getCarts, deleteItems } from '../redux/cartSlice';
 import { getBills } from '../redux/billsSlice';
 import { getBill } from '../redux/billSlice';
 
-function Navbar1(props) {
+function Navbar1() {
     if (!localStorage.getItem('token') || localStorage.getItem('token') == null) {
         window.location.replace('/');
     }
-    const dispatch = useDispatch();
-    const { cates, loading } = useSelector((state) => state.cate);
-    const { brands, loading1 } = useSelector((state) => state.brand);
-    const { carts, loading2 } = useSelector((state) => state.cart);
-    const [input, setInput] = useState('');
-    const [searchResult, setSearchResult] = useState(false);
-    const [filter, setFilter] = useState('');
-    const [below, setBelow] = useState(0);
-    const [above, setAbove] = useState(1000000000000);
-    const [billId, setBillId] = useState(true);
+
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -44,11 +35,20 @@ function Navbar1(props) {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+
+    const dispatch = useDispatch();
+    const { cates, loading } = useSelector((state) => state.cate);
+    const { brands, loading1 } = useSelector((state) => state.brand);
+    const { carts, loading2 } = useSelector((state) => state.cart);
     const { bills, loading3 } = useSelector((state) => state.bills);
     const { bill, loading4 } = useSelector((state) => state.bill);
 
+    const [input, setInput] = useState('');
+    const [searchResult, setSearchResult] = useState(false);
+    const [filter, setFilter] = useState('');
+    const [below, setBelow] = useState(0);
+    const [above, setAbove] = useState(1000000000000);
     const [count, setCount] = useState(0);
-
     const [result, setResult] = useState({});
 
     const [showAccount, setAccount] = useState(false);
@@ -83,61 +83,14 @@ function Navbar1(props) {
                 setCount(0);
             }
         }, 1000)
-    }, []);
+    }, [dispatch]);
     const loadCate = cates && cates.map((item) =>
         <NavDropdown.Item key={item.id} href={"category?page=1&id=" + item.id} id="">{item.name}</NavDropdown.Item>
     )
     const loadBrand = brands && brands.map((item) =>
         <NavDropdown.Item key={item.id} href={"brand?page=1&id=" + item.id} id="">{item.name}</NavDropdown.Item>
     )
-    var sum = 0;
-    carts && carts.map((item) => {
-        sum += item[6];
-    })
-    const deleteItem = (id) => {
-        Swal.fire({
-            icon: 'question',
-            title: 'Bạn chắc chứ ?',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'Xóa',
-            denyButtonText: `Không`,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Đã xóa thành công'
-                }).then(() => {
-                    dispatch(deleteItems(id));
-                })
-            }
-            else if (result.isDenied) {
-            }
-        });
 
-    }
-    const loadCart1 = () => {
-        if (localStorage.getItem('cart')) {
-            var localCart = JSON.parse(localStorage.getItem('cart'));
-            if (localCart != null) {
-                var id = [];
-                localCart.forEach(el => {
-                    id.push([el.id, el.qty]);
-                });
-            }
-            localStorage.setItem('productId', JSON.stringify(id));
-            dispatch(getCarts());
-        }
-    }
-    const loadCart = carts && carts.map((item, index) =>
-        <tr key={index}>
-            <td>{item[1]}</td>
-            <td>{parseInt(item[5]).toLocaleString('en-US')} đ</td>
-            <td>{parseInt(item[4])}</td>
-            <td>{(parseInt(item[6])).toLocaleString('en-US')} đ</td>
-            <td><Button variant='danger' onClick={() => deleteItem(item[0])}>Xóa</Button>
-            </td>
-        </tr >)
     const logout = () => {
         if (localStorage.getItem('token') || localStorage.getItem('token') != null) {
             Swal.fire({
@@ -158,12 +111,57 @@ function Navbar1(props) {
                         window.location.replace('/')
                     })
                 }
-                else if (result.isDenied) {
-                }
             });
-
         }
     }
+
+    const loadCart1 = () => {
+        if (localStorage.getItem('cart')) {
+            var localCart = JSON.parse(localStorage.getItem('cart'));
+            if (localCart != null) {
+                var id = [];
+                localCart.forEach(el => {
+                    id.push([el.id, el.qty]);
+                });
+            }
+            localStorage.setItem('productId', JSON.stringify(id));
+            dispatch(getCarts());
+        }
+    }
+
+    const loadCart = carts && carts.map((item, index) =>
+        <tr key={index}>
+            <td>{item[1]}</td>
+            <td>{parseInt(item[5]).toLocaleString('en-US')} đ</td>
+            <td>{parseInt(item[4])}</td>
+            <td>{(parseInt(item[6])).toLocaleString('en-US')} đ</td>
+            <td><Button variant='danger' onClick={() => deleteItem(item[0])}>Xóa</Button>
+            </td>
+        </tr >)
+
+    var sum = 0;
+    carts && carts.map((item) => { sum += item[6]; })
+
+    const deleteItem = (id) => {
+        Swal.fire({
+            icon: 'question',
+            title: 'Bạn chắc chứ ?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Xóa',
+            denyButtonText: `Không`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Đã xóa thành công'
+                }).then(() => {
+                    dispatch(deleteItems(id));
+                })
+            }
+        });
+    }
+
     const searchItem = () => {
         if (input === '') {
             Toast.fire({
@@ -186,18 +184,20 @@ function Navbar1(props) {
             })
         }
     }
+
     const loadBills = bills && bills.map((el, index) => (
         <tr key={index}>
             <td>{index + 1}</td>
             <td>{el.tenKH}</td>
             <td>{el.created_at}</td>
-            <td><Button variant='primary' onClick={() => { handleShowBill(); loadBill(el.id) }}>Chi tiết</Button>
-            </td>
+            <td><Button variant='primary' onClick={() => { handleShowBill(); loadBill(el.id) }}>Chi tiết</Button></td>
         </tr >))
+
     const loadBill = (id) => {
         localStorage.setItem('billId', JSON.stringify(id));
         dispatch(getBill());
     }
+
     const billDetails = bill && bill.map((el, index) => (
         <tr>
             <td>{index + 1}</td>
@@ -208,7 +208,7 @@ function Navbar1(props) {
             <td>{(parseInt(el.price) * el.qty).toLocaleString('en-US')} đ</td>
         </tr >
     ), '')
-    console.log(bills);
+
     return (
         <div>
             <Modal show={showAccount} onHide={handleCloseAccount} >
@@ -217,9 +217,7 @@ function Navbar1(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <InputGroup className="mb-3">
-                        <InputGroup.Text id="inputGroup-sizing-default">
-                            Email
-                        </InputGroup.Text>
+                        <InputGroup.Text id="inputGroup-sizing-default">Email</InputGroup.Text>
                         <Form.Control
                             aria-label="Default"
                             aria-describedby="inputGroup-sizing-default"
@@ -229,9 +227,7 @@ function Navbar1(props) {
                         />
                     </InputGroup>
                     <InputGroup className="mb-3">
-                        <InputGroup.Text id="inputGroup-sizing-default">
-                            API
-                        </InputGroup.Text>
+                        <InputGroup.Text id="inputGroup-sizing-default">API</InputGroup.Text>
                         <Form.Control
                             aria-label="Default"
                             aria-describedby="inputGroup-sizing-default"
@@ -242,12 +238,8 @@ function Navbar1(props) {
                     </InputGroup>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseAccount}>
-                        Close
-                    </Button>
-                    <Button variant="danger" onClick={logout}>
-                        Logout
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseAccount}>Close</Button>
+                    <Button variant="danger" onClick={logout}>Logout</Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showBills} onHide={handleCloseBills} size='lg'>
@@ -255,25 +247,20 @@ function Navbar1(props) {
                     <Modal.Title>Lịch sử đặt hàng</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div class="table-responsive">
-                        <table class="table table-primary">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Tên</th>
-                                    <th scope="col">Ngày tạo đơn</th>
-                                    <th scope="col">Tùy chỉnh</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {loadBills}
-                            </tbody>
-                        </table>
-                    </div></Modal.Body>
+                    <Table className="table-responsive" variant='primary'>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên</th>
+                                <th>Ngày tạo đơn</th>
+                                <th>Tùy chỉnh</th>
+                            </tr>
+                        </thead>
+                        <tbody>{loadBills}
+                        </tbody>
+                    </Table></Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseBills}>
-                        Close
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseBills}>Close</Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showBill} onHide={handleCloseBill} size='lg'>
@@ -281,115 +268,74 @@ function Navbar1(props) {
                     <Modal.Title>Chi tiết đơn hàng</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <div class="table-responsive">
-                        <table class="table table-primary">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Hình ảnh</th>
-                                    <th scope="col">Tên sản phẩm</th>
-                                    <th scope="col">Đơn giá</th>
-                                    <th scope="col">Số lượng</th>
-                                    <th scope="col">Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {billDetails}
-                            </tbody>
-                        </table>
-                    </div></Modal.Body>
+                    <Table className="table-responsive" variant='primary'>
+                        <thead><tr>
+                            <th>#</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr></thead>
+                        <tbody>{billDetails}</tbody>
+                    </Table>
+                </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseBill}>
-                        Close
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseBill}>Close</Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showSearch} onHide={handleCloseSearch} size='xl'>
                 <Modal.Header closeButton>
-                    <Col>
-                        <Modal.Title>Kết quả tìm kiếm</Modal.Title>
-                    </Col>
+                    <Col><Modal.Title>Kết quả tìm kiếm</Modal.Title></Col>
                     <Col></Col>
-
                 </Modal.Header>
-                <Modal.Body>
-                    {
-                        searchResult === true ?
-                            <div className="filter">
-                                {
-                                    <div id="between">
-                                        <Row>
-                                            <Col>
-                                                <InputGroup className="mb-3">
-                                                    <InputGroup.Text id="inputGroup-sizing-default">
-                                                        Giá sàn
-                                                    </InputGroup.Text>
-                                                    <Form.Control
-                                                        aria-label="Default"
-                                                        aria-describedby="inputGroup-sizing-default"
-                                                        onChange={(e) => setAbove(e.target.value) && setAbove(0)}
-                                                    />
-                                                </InputGroup>
-                                            </Col>
-                                            <Col>
-                                                <InputGroup className="mb-3">
-                                                    <InputGroup.Text id="inputGroup-sizing-default">
-                                                        Giá trần
-                                                    </InputGroup.Text>
-                                                    <Form.Control
-                                                        aria-label="Default"
-                                                        aria-describedby="inputGroup-sizing-default"
-                                                        onChange={(e) => setBelow(e.target.value) && setBelow(1000000000000)}
-                                                    />
-                                                </InputGroup>
-                                            </Col>
-                                            <Col>
-                                                <Button className="outline-primary" style={{ marginTop: "0px" }}
-                                                    onClick={() => setFilter(true)}>Áp dụng</Button></Col>
-                                        </Row>
-                                        <br />
-                                        <br />
-                                    </div>
-                                }
-                            </div> :
-                            <div></div>
-                    }
-                    <div className=" table-responsive">
-                        <table className="table table-primary">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Tên sản phẩm</th>
-                                    <th scope="col">Đơn giá</th>
-                                    <th scope="col">Thương hiệu</th>
-                                    <th scope="col">Loại thiết bị</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    filter === true ?
-                                        searchResult == true ?
-                                            result && result.map((el) => (
-                                                parseInt(el.price) >= parseInt(above) && parseInt(el.price) <= parseInt(below) ?
-                                                    <tr>
-                                                        <td style={{ width: "20%" }}><img style={{ width: "50%" }} src={"https://students.trungthanhweb.com/images/" + el.image} alt="" /></td>
-                                                        <td><a style={{ textDecoration: "none", color: "blue", textWeight: "bold" }} href={"/productDetails?id=" + el['id']}>{el.name}</a></td >
-                                                        <td>{el.price.toLocaleString('en-US')} đ</td>
-                                                        <td>{el.brandname}</td>
-                                                        <td>{el.catename}</td>
-                                                    </tr>
-                                                    : ""
-                                            ))
-                                            : <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td><p className='text-center'>Không có kết quả tìm kiếm</p></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        : searchResult === true ?
-                                            result && result.map((el) => (
-
+                <Modal.Body>{
+                    searchResult === true ?
+                        <div>{
+                            <div>
+                                <Row>
+                                    <Col>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Text id="inputGroup-sizing-default">Giá sàn</InputGroup.Text>
+                                            <Form.Control
+                                                aria-label="Default"
+                                                aria-describedby="inputGroup-sizing-default"
+                                                onChange={(e) => setAbove(e.target.value) && setAbove(0)}
+                                            />
+                                        </InputGroup>
+                                    </Col>
+                                    <Col>
+                                        <InputGroup className="mb-3">
+                                            <InputGroup.Text id="inputGroup-sizing-default">Giá trần</InputGroup.Text>
+                                            <Form.Control
+                                                aria-label="Default"
+                                                aria-describedby="inputGroup-sizing-default"
+                                                onChange={(e) => setBelow(e.target.value) && setBelow(1000000000000)}
+                                            />
+                                        </InputGroup>
+                                    </Col>
+                                    <Col>
+                                        <Button className="outline-primary" style={{ marginTop: "0px" }} onClick={() => setFilter(true)}>Áp dụng</Button>
+                                    </Col>
+                                </Row>
+                                <br /><br />
+                            </div>}
+                        </div> : <div></div>
+                }
+                    <Table className="table-responsive" variant='primary'>
+                        <thead><tr>
+                            <th>#</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Thương hiệu</th>
+                            <th>Loại thiết bị</th>
+                        </tr></thead>
+                        <tbody>
+                            {
+                                filter === true ?
+                                    searchResult === true ?
+                                        result && result.map((el) => (
+                                            parseInt(el.price) >= parseInt(above) && parseInt(el.price) <= parseInt(below) ?
                                                 <tr>
                                                     <td style={{ width: "20%" }}><img style={{ width: "50%" }} src={"https://students.trungthanhweb.com/images/" + el.image} alt="" /></td>
                                                     <td><a style={{ textDecoration: "none", color: "blue", textWeight: "bold" }} href={"/productDetails?id=" + el['id']}>{el.name}</a></td >
@@ -397,23 +343,39 @@ function Navbar1(props) {
                                                     <td>{el.brandname}</td>
                                                     <td>{el.catename}</td>
                                                 </tr>
-                                            ))
-                                            : <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td><p className='text-center'>Không có kết quả tìm kiếm</p></td>
-                                                <td></td>
-                                                <td></td>
+                                                : ""
+                                        ))
+                                        : <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><p className='text-center'>Không có kết quả tìm kiếm</p></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    : searchResult === true ?
+                                        result && result.map((el) => (
+
+                                            <tr>
+                                                <td style={{ width: "20%" }}><img style={{ width: "50%" }} src={"https://students.trungthanhweb.com/images/" + el.image} alt="" /></td>
+                                                <td><a style={{ textDecoration: "none", color: "blue", textWeight: "bold" }} href={"/productDetails?id=" + el['id']}>{el.name}</a></td >
+                                                <td>{el.price.toLocaleString('en-US')} đ</td>
+                                                <td>{el.brandname}</td>
+                                                <td>{el.catename}</td>
                                             </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                        ))
+                                        : <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td><p className='text-center'>Không có kết quả tìm kiếm</p></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                            }
+                        </tbody>
+                    </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseSearch}>
-                        Close
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseSearch}>Close</Button>
                 </Modal.Footer>
             </Modal>
             <Modal show={showCart} onHide={handleCloseCart} size='xl'>
@@ -422,21 +384,19 @@ function Navbar1(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Table responsive="sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">Tên sản phẩm</th>
-                                <th scope="col">Đơn giá</th>
-                                <th scope="col">Số lượng</th>
-                                <th scope="col">Thành tiền</th>
-                                <th scope="col">Tùy chỉnh</th>
-                            </tr>
-                        </thead>
+                        <thead><tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th>Tùy chỉnh</th>
+                        </tr></thead>
                         <tbody>
                             {loadCart}
                             {
                                 <tr>
                                     <td colSpan="3"><span >Tổng cộng</span></td>
-                                    <td>`{sum.toLocaleString('en-US')} đ</td>
+                                    <td>{sum.toLocaleString('en-US')} đ</td>
                                     <td></td>
                                 </tr>
                             }
@@ -444,25 +404,19 @@ function Navbar1(props) {
                     </Table>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseCart}>
-                        Close
-                    </Button>
+                    <Button variant="secondary" onClick={handleCloseCart}>Close</Button>
                     {
                         count > 0 ?
-                            <Button variant="primary" href='/checkout' onClick={handleCloseCart}>
-                                Thanh toán
-                            </Button>
+                            <Button variant="primary" href='/checkout' onClick={handleCloseCart}>Thanh toán</Button>
                             :
-                            <Button variant="primary" href='/checkout' disabled onClick={handleCloseCart}>
-                                Thanh toán
-                            </Button>
+                            <Button variant="primary" href='/checkout' disabled onClick={handleCloseCart}>Thanh toán</Button>
                     }
 
                 </Modal.Footer>
             </Modal>
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
                 <Container fluid>
-                    <Navbar.Brand href="/">Hello {props.name}</Navbar.Brand>
+                    <Navbar.Brand href="/"><Image src='https://yt3.googleusercontent.com/KExMKZqWdtVxdDxZaVzQ_xZhE81AviwRDmmZpwveNExBqOwyjmTMUXIhj-lv63sVdUg0TdrhGQ=s900-c-k-c0x00ffffff-no-rj' style={{ width: 50, height: 50 }} fluid></Image></Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
@@ -471,22 +425,13 @@ function Navbar1(props) {
                             navbarScroll
                         >
                             <Nav.Link href="/home">Home</Nav.Link>
-                            <NavDropdown title="Loại sản phẩm" id="basic-nav-dropdown">
-                                {loadCate}
-                            </NavDropdown>
-                            <NavDropdown title="Thương hiệu" id="basic-nav-dropdown">
-                                {loadBrand}
-                            </NavDropdown>
+                            <NavDropdown title="Loại sản phẩm" id="basic-nav-dropdown">{loadCate}</NavDropdown>
+                            <NavDropdown title="Thương hiệu" id="basic-nav-dropdown">{loadBrand}</NavDropdown>
                             <NavDropdown title={<box-icon name='user' type='solid' color='#ffffff' ></box-icon>} id="basic-nav-dropdown">
-                                <NavDropdown.Item href="" onClick={handleShowAccount}>
-                                    Tài khoản
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="" onClick={handleShowBills} >
-                                    Lịch sử đơn hàng
-                                </NavDropdown.Item>
+                                <NavDropdown.Item onClick={handleShowAccount}>Tài khoản</NavDropdown.Item>
+                                <NavDropdown.Item onClick={handleShowBills} >Lịch sử đơn hàng</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="" onClick={logout}>Logout
-                                </NavDropdown.Item>
+                                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                         <Form className="d-flex">
@@ -503,7 +448,7 @@ function Navbar1(props) {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-        </div >
+        </div>
     )
 }
 

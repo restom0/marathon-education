@@ -7,18 +7,18 @@ export const brandSlice = createSlice({
     name: 'brands',
     initialState: {
         brands: [],
-        loading1: false
+        loading: false
     },
     extraReducers: {
         [getBrands.pending]: (state, action) => {
-            state.loading1 = true;
+            state.loading = true;
         },
         [getBrands.fulfilled]: (state, action) => {
-            state.loading1 = false;
+            state.loading = false;
             state.brands = action.payload.brands;
         },
         [getBrands.rejected]: (state, action) => {
-            state.loading1 = false;
+            state.loading = false;
         }
     }
 })
