@@ -87,7 +87,7 @@ function ProductDetail() {
                                 </Col>
                             </Row>
                             <Row className="mt-2">
-                                <Col className="col-md"><Button className="w-100 btn btn-outline-primary">Trả góp</Button></Col>
+                                <Col className="col-md"><Button className="w-100" variant='outline-primary'>Trả góp</Button></Col>
                                 <Col className="col-md"><Button className="w-100" variant='outline-primary'>Thu cũ đổi mới</Button></Col>
                             </Row>
                         </Col>

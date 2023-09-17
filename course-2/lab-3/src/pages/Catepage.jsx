@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../css/homepage.cs  s'
+import '../css/homepage.css'
 
 import Navbar1 from '../components/Navbar';
 import Carousel1 from '../components/Carousel1';
