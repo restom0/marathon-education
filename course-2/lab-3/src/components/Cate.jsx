@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
+
 import { Col, Image, Button, Row } from 'react-bootstrap'
 import Swal from 'sweetalert2';
 import Pagination from 'react-bootstrap/Pagination';
 
 import { getCateProducts } from '../redux/cateProductSlice';
+
 function Cate() {
     const Toast = Swal.mixin({
         toast: true,
@@ -37,17 +39,19 @@ function Cate() {
 
     const loadProduct = cateProducts.data && cateProducts.data.map((el, index) =>
         <Col className="col-md-4 text-center" key={index} >
-            <a className="product" style={{ textDecoration: "none", height: "40vh" }} href={"/productDetails?id=" + el['id']}>
-                <Image style={{ height: "40vh", width: "40vh" }}
-                    src={"https://students.trungthanhweb.com/images/" + el['image']}
-                    fluid />
-            </a>
-            <a style={{ textDecoration: "none" }} href={"/productDetails?id=" + el['id']}><h4>{el['name']}</h4></a>
-            <p style={{ color: "red", fontWeight: "bold" }}>{el['price'].toLocaleString('en-US')} đ</p>
-            <p>{el['catename']}</p>
-            <p>{el['brandname']}</p>
-            <Button href={"/productDetails?id=" + el['id']} className="me-2" variant='primary'>Chi tiết</Button>
-            <Button className="ms-2" variant='success' onClick={() => addToCart(parseInt(el['id']))}>Thêm</Button>
+            <div className="product product2">
+                <a className="product" style={{ textDecoration: "none", height: "40vh" }} href={"/productDetails?id=" + el['id']}>
+                    <Image style={{ height: "40vh", width: "40vh" }}
+                        src={"https://students.trungthanhweb.com/images/" + el['image']}
+                        fluid />
+                </a>
+                <a style={{ textDecoration: "none" }} href={"/productDetails?id=" + el['id']}><h4>{el['name']}</h4></a>
+                <p style={{ color: "red", fontWeight: "bold" }}>{el['price'].toLocaleString('en-US')} đ</p>
+                <p>{el['catename']}</p>
+                <p>{el['brandname']}</p>
+                <Button href={"/productDetails?id=" + el['id']} className="me-2" variant='primary'>Chi tiết</Button>
+                <Button className="ms-2" variant='success' onClick={() => addToCart(parseInt(el['id']))}>Thêm</Button>
+            </div>
         </Col>
     )
 
