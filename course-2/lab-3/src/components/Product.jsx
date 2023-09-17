@@ -39,10 +39,10 @@ function Product() {
                 <p style={{ color: "red", fontWeight: "bold" }}>{parseInt(el['price']).toLocaleString('en-US')} đ</p>
                 <p>{el['catename']}</p>
                 <p>{el['brandname']}</p>
-                <Button href={"/productDetails?id=" + el['id']} className="btn btn-primary chitietBtn" data-id={el['id']} >
+                <Button href={"/productDetails?id=" + el['id']} className="btn btn-primary me-2" size='lg' data-id={el['id']} >
                     Chi tiết
                 </Button>
-                <Button className="btn btn-success" onClick={() => addToCart(parseInt(el['id']))}>
+                <Button className="btn btn-success ms-2" size='lg' onClick={() => addToCart(parseInt(el['id']))}>
                     Thêm
                 </Button>
             </div>

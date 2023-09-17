@@ -75,7 +75,7 @@ function ProductDetail() {
                             </div>
                             <div className="col-md-6 text-center" style={{ margin: "10px auto" }}>
                                 <h4 className="text-bold" style={{ marginTop: "20vh" }}>{product[0].name}</h4>
-                                <h4 className="text-bold text-danger">{product[0].price} đ</h4>
+                                <h4 className="text-bold text-danger">{parseInt(product[0].price).toLocaleString('en-US')} đ</h4>
                                 <div className="row">
                                     <div className="col-md">
                                         <Button variant='primary' className="w-100" onClick={() => addToCart(parseInt(product[0].id))}>Mua ngay</Button>
@@ -104,7 +104,11 @@ function ProductDetail() {
                                     ))}
                                 </Swiper></div>
                         </div>
-                        <div className="row mt-3 w-100">{product[0].content}</div>
+                        <div className="row mt-3 w-100">
+                            <div dangerouslySetInnerHTML={
+                                { __html: product[0].content }
+                            } />
+                        </div>
                     </Container>
                     : <div></div>
             }

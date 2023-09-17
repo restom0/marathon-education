@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "react-bootstrap": "^2.8.0"
+    "react-bootstrap": "^2.8.0",
+    "react-markdown": "^8.0.7"
   }
 }

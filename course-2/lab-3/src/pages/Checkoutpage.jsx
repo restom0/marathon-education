@@ -8,7 +8,9 @@ function Checkoutpage(props) {
   return (
     <div>
       <Navbar1 name={props.name} />
-      <Checkout />
+      <Container style={{ marginTop: "5vh" }}>
+        <Checkout />
+      </Container>
       <Footer1 />
     </div>
   )
