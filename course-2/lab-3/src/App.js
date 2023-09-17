@@ -9,6 +9,7 @@ import Brandpage from "./pages/Brandpage";
 import CatePage from "./pages/Catepage";
 import Login from "./components/Login";
 import ProductDetails from "./pages/ProductDetails";
+import Checkoutpage from "./pages/Checkoutpage";
 function App() {
 
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/productDetails" element={<ProductDetails name='dsa' />} />
           <Route path="/" element={<Login name='dsa' />} />
           <Route path="/brand" element={<Brandpage name='dsa' />} />
+          <Route path="/checkout" element={<Checkoutpage name='dsa' />} />
           <Route path="/category" element={<CatePage name='dsa' />} />
           {/* <Route exact path="/news" element={<News />} />
           <Route exact path="/login" element={<Login />} />

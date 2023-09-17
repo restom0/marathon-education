@@ -36,7 +36,7 @@ function Product() {
                 </a>
                 <a style={{ textDecoration: "none" }} href={"/productDetails?id=" + el['id']}>
                     <h4>{el['name']}</h4></a>
-                <p style={{ color: "red", fontWeight: "bold" }}>{el['price'].toLocaleString('en-US')} đ</p>
+                <p style={{ color: "red", fontWeight: "bold" }}>{parseInt(el['price']).toLocaleString('en-US')} đ</p>
                 <p>{el['catename']}</p>
                 <p>{el['brandname']}</p>
                 <Button href={"/productDetails?id=" + el['id']} className="btn btn-primary chitietBtn" data-id={el['id']} >

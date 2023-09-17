@@ -9,13 +9,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { Col, Row, Table } from 'react-bootstrap';
+import { Col, Image, Row, Table } from 'react-bootstrap';
 
 import Swal from 'sweetalert2';
 import 'boxicons'
 import { getCates } from '../redux/cateSlice';
 import { getBrands } from '../redux/brandSlice';
 import { getCarts, deleteItems } from '../redux/cartSlice';
+import { getBills } from '../redux/billsSlice';
+import { getBill } from '../redux/billSlice';
 
 function Navbar1(props) {
     if (!localStorage.getItem('token') || localStorage.getItem('token') == null) {
@@ -30,6 +32,7 @@ function Navbar1(props) {
     const [filter, setFilter] = useState('');
     const [below, setBelow] = useState(0);
     const [above, setAbove] = useState(1000000000000);
+    const [billId, setBillId] = useState(true);
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -41,6 +44,8 @@ function Navbar1(props) {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+    const { bills, loading3 } = useSelector((state) => state.bills);
+    const { bill, loading4 } = useSelector((state) => state.bill);
 
     const [count, setCount] = useState(0);
 
@@ -50,9 +55,13 @@ function Navbar1(props) {
     const handleCloseAccount = () => setAccount(false);
     const handleShowAccount = () => setAccount(true);
 
-    const [showLog, setShowLog] = useState(false);
-    const handleCloseLog = () => setShowLog(false);
-    const handleShowLog = () => setShowLog(true);
+    const [showBills, setShowBills] = useState(false);
+    const handleCloseBills = () => setShowBills(false);
+    const handleShowBills = () => setShowBills(true);
+
+    const [showBill, setShowBill] = useState(false);
+    const handleCloseBill = () => setShowBill(false);
+    const handleShowBill = () => setShowBill(true);
 
     const [showSearch, setShowSearch] = useState(false);
     const handleCloseSearch = () => setShowSearch(false);
@@ -65,17 +74,7 @@ function Navbar1(props) {
     useEffect(() => {
         dispatch(getCates());
         dispatch(getBrands());
-        if (localStorage.getItem('cart')) {
-            var localCart = JSON.parse(localStorage.getItem('cart'));
-            if (localCart != null) {
-                var id = [];
-                localCart.forEach(el => {
-                    id.push([el.id, el.qty]);
-                });
-            }
-            localStorage.setItem('id', JSON.stringify(id));
-            dispatch(getCarts());
-        }
+        dispatch(getBills());
         setInterval(() => {
             if (localStorage.getItem('cart')) {
                 setCount(JSON.parse(localStorage.getItem('cart')).length);
@@ -116,6 +115,19 @@ function Navbar1(props) {
             }
         });
 
+    }
+    const loadCart1 = () => {
+        if (localStorage.getItem('cart')) {
+            var localCart = JSON.parse(localStorage.getItem('cart'));
+            if (localCart != null) {
+                var id = [];
+                localCart.forEach(el => {
+                    id.push([el.id, el.qty]);
+                });
+            }
+            localStorage.setItem('productId', JSON.stringify(id));
+            dispatch(getCarts());
+        }
     }
     const loadCart = carts && carts.map((item, index) =>
         <tr key={index}>
@@ -174,6 +186,29 @@ function Navbar1(props) {
             })
         }
     }
+    const loadBills = bills && bills.map((el, index) => (
+        <tr key={index}>
+            <td>{index + 1}</td>
+            <td>{el.tenKH}</td>
+            <td>{el.created_at}</td>
+            <td><Button variant='primary' onClick={() => { handleShowBill(); loadBill(el.id) }}>Chi tiết</Button>
+            </td>
+        </tr >))
+    const loadBill = (id) => {
+        localStorage.setItem('billId', JSON.stringify(id));
+        dispatch(getBill());
+    }
+    const billDetails = bill && bill.map((el, index) => (
+        <tr>
+            <td>{index + 1}</td>
+            <td style={{ width: "20%" }}><Image style={{ width: "50%" }} src={"https://students.trungthanhweb.com/images/" + el.image} /></td>
+            <td>{el.productname}</td>
+            <td>{parseInt(el.price).toLocaleString('en-US')} đ</td>
+            <td>{el.qty}</td>
+            <td>{(parseInt(el.price) * el.qty).toLocaleString('en-US')} đ</td>
+        </tr >
+    ), '')
+    console.log(bills);
     return (
         <div>
             <Modal show={showAccount} onHide={handleCloseAccount} >
@@ -215,17 +250,57 @@ function Navbar1(props) {
                     </Button>
                 </Modal.Footer>
             </Modal>
-            <Modal show={showLog} onHide={handleCloseLog}>
+            <Modal show={showBills} onHide={handleCloseBills} size='lg'>
                 <Modal.Header closeButton>
-                    <Modal.Title>Lịch sử đơn hàng</Modal.Title>
+                    <Modal.Title>Lịch sử đặt hàng</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Woohoo, you are reading this text in a modal!</Modal.Body>
+                <Modal.Body>
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên</th>
+                                    <th scope="col">Ngày tạo đơn</th>
+                                    <th scope="col">Tùy chỉnh</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {loadBills}
+                            </tbody>
+                        </table>
+                    </div></Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseLog}>
+                    <Button variant="secondary" onClick={handleCloseBills}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleCloseLog}>
-                        Save Changes
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showBill} onHide={handleCloseBill} size='lg'>
+                <Modal.Header closeButton>
+                    <Modal.Title>Chi tiết đơn hàng</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Đơn giá</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {billDetails}
+                            </tbody>
+                        </table>
+                    </div></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseBill}>
+                        Close
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -372,9 +447,17 @@ function Navbar1(props) {
                     <Button variant="secondary" onClick={handleCloseCart}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleCloseCart}>
-                        Thanh toán
-                    </Button>
+                    {
+                        count > 0 ?
+                            <Button variant="primary" href='/checkout' onClick={handleCloseCart}>
+                                Thanh toán
+                            </Button>
+                            :
+                            <Button variant="primary" href='/checkout' disabled onClick={handleCloseCart}>
+                                Thanh toán
+                            </Button>
+                    }
+
                 </Modal.Footer>
             </Modal>
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
@@ -398,7 +481,7 @@ function Navbar1(props) {
                                 <NavDropdown.Item href="" onClick={handleShowAccount}>
                                     Tài khoản
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="" onClick={handleShowLog} >
+                                <NavDropdown.Item href="" onClick={handleShowBills} >
                                     Lịch sử đơn hàng
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
@@ -415,7 +498,7 @@ function Navbar1(props) {
                                 onChange={(e) => setInput(e.target.value)}
                             />
                             <Button variant="outline-success" className="me-2" onClick={() => { handleShowSearch(); searchItem() }}>Search</Button>
-                            <Button variant="outline-success" onClick={handleShowCart}><box-icon name='cart-alt' color='#198754' className="justify-content-center"></box-icon></Button>
+                            <Button variant="outline-success" onClick={() => { handleShowCart(); loadCart1() }}><box-icon name='cart-alt' color='#198754' className="justify-content-center"></box-icon></Button>
                         </Form>
                     </Navbar.Collapse>
                 </Container>

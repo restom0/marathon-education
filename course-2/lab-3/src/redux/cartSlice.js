@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const getCarts = createAsyncThunk('carts/getCarts', async () => {
-    var id = JSON.parse(localStorage.getItem("id"));
+    var id = JSON.parse(localStorage.getItem("productId"));
     if (id && id.length > 0) {
         return fetch("https://students.trungthanhweb.com/api/getCart?apitoken=" + localStorage.getItem('token') + "&id=" + JSON.stringify(id))
             .then((res) => res.json());
