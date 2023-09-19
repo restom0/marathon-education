@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Swal from 'sweetalert2';
 import "../css/login.css"
+import { Button, Form, InputGroup } from 'react-bootstrap';
 function Login() {
     if (localStorage.getItem('token') || localStorage.getItem('token') != null) {
         window.location.replace('/home');
@@ -62,8 +63,28 @@ function Login() {
                     <img src="" alt="" className="w-100" />
                 </div>
                 <div className="mb-3">
-                    <input type="email" className="form-control" id="exampleInputEmail1" onChange={(e) => setEmail(e.target.value)} aria-describedby="emailHelp" />
-                    <button type="submit" className="btn btn-primary" onClick={checkLogin}>Submit</button>
+                    <h1 className='text-center mb-5'>Login Account</h1>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Email address</Form.Label>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="basic-addon1">@</InputGroup.Text>
+                            <Form.Control
+                                placeholder="nguyenvana@gmail.com"
+                                aria-label="nguyenvana@gmail.com"
+                                aria-describedby="basic-addon1"
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </InputGroup>
+                        <Form.Text className="text-muted">
+                            We'll never share your email with anyone else.
+                        </Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                        <Form.Check type="checkbox" label="Check me out" />
+                    </Form.Group>
+
+                    <button type="submit" className="btn btn-primary w-100" onClick={checkLogin}>Submit</button>
+
                 </div>
             </div>
         </div>
