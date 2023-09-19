@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Navbar from './Navbar';
 import Container from 'react-bootstrap/Container';
 import Swal from "sweetalert2";
 import { addTask, selectTask, editTask, finishTask, deleteTaskSlice } from "../redux/todoSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Navbar1 from '../components/Navbar';
 
-function Todo(props) {
+function TodoRedux() {
   const dispatch = useDispatch();
   const todo = useSelector(selectTask);
   const [item, setItem] = useState('');
@@ -134,7 +134,7 @@ function Todo(props) {
   // }
   return (
     <div>
-      <Navbar name={props.name} />
+      <Navbar1 />
       <Container>
         <div className='mt-4 row w-100'>
           <div className='row mt-3 ms-3'>
@@ -179,4 +179,4 @@ function Todo(props) {
   );
 }
 
-export default Todo;
+export default TodoRedux;

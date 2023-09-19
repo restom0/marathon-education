@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import Swal from "sweetalert2";
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
 
 import { getProducts, updateProducts } from '../redux/productSlice';
@@ -26,6 +26,13 @@ function Product() {
 
     const [page, setPage] = useState(2);
     const [isLoading, setIsLoading] = useState(false);
+    const [input, setInput] = useState('');
+    const [searchResult, setSearchResult] = useState(false);
+    const [filter, setFilter] = useState('');
+    const [below, setBelow] = useState(0);
+    const [above, setAbove] = useState(1000000000000);
+    const [count, setCount] = useState(0);
+    const [result, setResult] = useState({});
 
     useEffect(() => {
         dispatch(getProducts());
@@ -93,15 +100,73 @@ function Product() {
             dispatch(updateProducts(newProducts));
         })
     }
-
+    const searchItem = () => {
+        if (input === '') {
+            Toast.fire({
+                icon: 'error',
+                title: 'Giá trị nhập không khả dụng'
+            })
+        }
+        else {
+            fetch("https://students.trungthanhweb.com/api/getSearchProducts?apitoken=" + localStorage.getItem('token') + "&name=" + input).then(res => res.json()).then((res) => {
+                if (res.result.length === 0) {
+                    setSearchResult(false);
+                }
+                else {
+                    setSearchResult(true);
+                    setResult(res.result);
+                    setFilter(false);
+                    setAbove(0);
+                    setBelow(1000000000000);
+                }
+            })
+        }
+    }
     return (
         <div>
             <div>
                 <h1 className='text-center'>Sản phẩm</h1>
-                <Row>{loadProduct}</Row>
-            </div>
-            <div className="row w-100 mt-3">
-                <Button style={{ border: "none", margin: "30px auto" }} className="w-25" variant='outline-primary' onClick={() => showMore()} disabled={isLoading}>{isLoading ? "" : "Xem thêm..."}</Button>
+                <Row>
+                    <Col className='col-md-2'>
+                        <Form className="d-flex mb-3">
+                            <Form.Control
+                                type="search"
+                                placeholder="Search"
+                                className="me-2"
+                                aria-label="Search"
+                                onChange={(e) => setInput(e.target.value)}
+                            />
+                            <Button variant="outline-success" className="me-2" onClick={() => { searchItem() }}>Search</Button>
+                        </Form>
+                        <Row>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Text id="inputGroup-sizing-default">Giá sàn</InputGroup.Text>
+                                <Form.Control
+                                    aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    onChange={(e) => setAbove(e.target.value) && setAbove(0)}
+                                />
+                            </InputGroup>
+                        </Row>
+                        <Row>
+                            <InputGroup className="mb-3">
+                                <InputGroup.Text id="inputGroup-sizing-default">Giá trần</InputGroup.Text>
+                                <Form.Control
+                                    aria-label="Default"
+                                    aria-describedby="inputGroup-sizing-default"
+                                    onChange={(e) => setBelow(e.target.value) && setBelow(1000000000000)}
+                                />
+                            </InputGroup>
+                        </Row>
+                        <Row>
+                            <Button className="outline-primary" style={{ marginTop: "0px" }} onClick={() => setFilter(true)}>Áp dụng</Button>
+                        </Row>
+                    </Col>
+                    <Col className='col-md-10'><Row>
+                        {loadProduct}
+                        <Button style={{ border: "none", margin: "30px auto" }} className="w-25" variant='outline-primary' onClick={() => showMore()} disabled={isLoading}>{isLoading ? "" : "Xem thêm..."}</Button>
+                    </Row></Col>
+                </Row>
             </div>
         </div>
     )

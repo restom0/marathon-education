@@ -433,6 +433,9 @@ function Navbar1() {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                             </NavDropdown>
+                            <Nav.Link href="/todoraw">Todo React Raw</Nav.Link>
+                            <Nav.Link href="/todoapi">Todo API</Nav.Link>
+                            <Nav.Link href="/todoredux">Todo Redux</Nav.Link>
                         </Nav>
                         <Form className="d-flex">
                             <Form.Control
