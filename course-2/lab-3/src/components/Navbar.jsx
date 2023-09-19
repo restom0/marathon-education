@@ -427,15 +427,16 @@ function Navbar1() {
                             <Nav.Link href="/home">Home</Nav.Link>
                             <NavDropdown title="Loại sản phẩm" id="basic-nav-dropdown">{loadCate}</NavDropdown>
                             <NavDropdown title="Thương hiệu" id="basic-nav-dropdown">{loadBrand}</NavDropdown>
+                            <Nav.Link href="/todoraw">Todo React Raw</Nav.Link>
+                            <Nav.Link href="/todoapi">Todo API</Nav.Link>
+                            <Nav.Link href="/todoredux">Todo Redux</Nav.Link>
                             <NavDropdown title={<box-icon name='user' type='solid' color='#ffffff' ></box-icon>} id="basic-nav-dropdown">
                                 <NavDropdown.Item onClick={handleShowAccount}>Tài khoản</NavDropdown.Item>
                                 <NavDropdown.Item onClick={handleShowBills} >Lịch sử đơn hàng</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Link href="/todoraw">Todo React Raw</Nav.Link>
-                            <Nav.Link href="/todoapi">Todo API</Nav.Link>
-                            <Nav.Link href="/todoredux">Todo Redux</Nav.Link>
+
                         </Nav>
                         <Form className="d-flex">
                             <Form.Control
