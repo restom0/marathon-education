@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Swal from "sweetalert2";
 import { addTask, selectTask, editTask, finishTask, deleteTaskSlice } from "../redux/todoSlice";
@@ -7,10 +7,11 @@ import Navbar1 from '../components/Navbar';
 
 function TodoRedux() {
   const dispatch = useDispatch();
-  const todo = useSelector(selectTask);
   const [item, setItem] = useState('');
   const [edit, setEdit] = useState(false);
   const [id, setId] = useState(0);
+  const todos = useSelector((state) => state.task);
+
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -35,11 +36,12 @@ function TodoRedux() {
       item1.id = Date.now();
       item1.todo = item;
       item1.status = false;
-      dispatch(addTask(item1));
-      setItem('');
       Toast.fire({
         icon: 'success',
         title: 'Thêm thành công'
+      }).then(() => {
+        dispatch(addTask(item1));
+        setItem('');
       })
     }
   }
@@ -53,9 +55,13 @@ function TodoRedux() {
       denyButtonText: `Không`,
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(deleteTaskSlice(i));
+        Toast.fire({
+          icon: 'success',
+          title: 'Thêm thành công'
+        }).then(() => {
+          dispatch(deleteTaskSlice(i));
+        })
       } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
       }
     })
 
@@ -66,17 +72,19 @@ function TodoRedux() {
     setItem(todo);
     setEdit(true);
   }
-  const editTodo = async (i) => {
-    dispatch(editTask({
-      id: id,
-      todo: item
-    }))
+  const editTodo = async (e) => {
+    e.preventDefault();
     Toast.fire({
       icon: 'success',
       title: 'Sửa thành công'
+    }).then(() => {
+      dispatch(editTask({
+        id: id,
+        todo: item
+      }))
+      setItem('');
+      setEdit(false);
     })
-    setItem('');
-    setEdit(false);
   }
   const statusTodo = (i) => {
     Swal.fire({
@@ -88,33 +96,17 @@ function TodoRedux() {
       denyButtonText: `Không`,
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(finishTask(i));
         Toast.fire({
           icon: 'success',
           title: 'Đã hoàn thành task'
+        }).then(() => {
+          console.log(i);
+          dispatch(finishTask(i));
+          setItem('');
         })
-      }
-      else if (result.isDenied) {
-        Swal.fire('Trở về trang chính', '', '')
       }
     });
   }
-  const todoList = todo.map((item, index) =>
-    <tr>
-      <th>{++index}</th>
-      <td>{item.todo}</td>
-      <td>{
-        item.status === 0 ?
-          <input type="checkbox" checked disabled name="" id="" />
-          :
-          <input type="checkbox" onChange={() => statusTodo(item.id)} name="" id="" />
-
-      }</td>
-      <td><button className='btn btn-danger' onClick={() => deleteTodo(item.id)}>Xóa</button>
-        <button className='btn btn-warning ms-3' onClick={() => updateTodo(item.id, todo)} >Sửa</button></td>
-    </tr>
-  )
-
 
   // const updateTodo = (i, e) => {
   /////   todo[i]['status'] = 1;
@@ -158,20 +150,36 @@ function TodoRedux() {
                                 {todoList}
                             </ul>
                         } */}
-            {todo && (
-              <table className="table">
-                <thead className="table-dark">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Todo</th>
-                    <th scope="col">Tình trạng</th>
-                    <th scope="col">Tùy chỉnh</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {todoList}
-                </tbody>
-              </table>)}
+
+            <table className="table">
+              <thead className="table-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Todo</th>
+                  <th scope="col">Tình trạng</th>
+                  <th scope="col">Tùy chỉnh</th>
+                </tr>
+              </thead>
+              <tbody>
+                {todos.todos && todos.todos.length > 0 ?
+                  todos.todos.map((item, index) =>
+                    <tr key={index}>
+                      <th>{++index}</th>
+                      <td>{item.todo}</td>
+                      <td>{
+                        item.status === true ?
+                          <input type="checkbox" checked disabled name="" id="" />
+                          :
+                          <input type="checkbox" onChange={() => statusTodo(item.id)} name="" id="" />
+
+                      }</td>
+                      <td><button className='btn btn-danger' onClick={() => deleteTodo(item.id)}>Xóa</button>
+                        <button className='btn btn-warning ms-3' onClick={() => updateTodo(item.id, todos.todos)} >Sửa</button></td>
+                    </tr>
+                  ) : <tr></tr>}
+                {/* {todoList} */}
+              </tbody>
+            </table>
           </div>
         </div>
       </Container>

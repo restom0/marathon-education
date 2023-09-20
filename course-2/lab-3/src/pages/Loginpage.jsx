@@ -8,7 +8,6 @@ function Loginpage() {
         <Col></Col>
         <Col style={{ height: '100vh' }}>
           <div className="row" style={{ height: '100vh' }}>
-
             <Col className="col align-self-center">
               <div className='mx-auto'>
                 <Login />

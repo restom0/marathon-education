@@ -202,7 +202,6 @@ function TodoAPI() {
                     }
                     else if (result.isDenied) {
                         Swal.fire('Trở về trang chính', '', '')
-
                     }
                 });
             }

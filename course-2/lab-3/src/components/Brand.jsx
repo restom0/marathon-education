@@ -98,7 +98,7 @@ function Brand() {
             <h1 className="text-center">{localStorage.getItem('brand')}</h1>
             <hr />
             <Row>{loadProduct}</Row>
-            <Pagination style={{ float: "right" }}>
+            <Pagination style={{ float: "right" }} className='mt-3'>
                 {parseInt(page) !== 1 ? <Pagination.First onClick={() => changePage(1)} /> : <div></div>}
                 {parseInt(page) !== 1 ? <Pagination.Prev onClick={() => changePage(parseInt(page) - 1)} /> : <div></div>}
                 {num.map((el, index = 1) => (

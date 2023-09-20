@@ -14,24 +14,25 @@ export const taskSlice = createSlice({
         editTask: (state, action) => {
             state.todos.forEach(el => {
                 if (el.id === action.payload.id) {
-                    el.note = action.payload.todo;
+                    el.todo = action.payload.todo;
                     el.status = false;
                 }
             });
         },
         finishTask: (state, action) => {
+            console.log(action.payload);
             state.todos.forEach(el => {
-                if (el.id === action.payload.id) {
+                if (el.id === action.payload) {
                     el.status = true;
                 }
             });
         },
         deleteTaskSlice: (state, action) => {
-            state.todos = state.todos.filter((item) => item.id !== action.payload.id);
+            state.todos = state.todos.filter((item) => item.id !== action.payload);
         }
     }
 });
 
 export const { addTask, editTask, finishTask, deleteTaskSlice } = taskSlice.actions;
-export const selectTask = (state) => state.task.todos;
+export const selectTask = (state) => state.todos;
 export default taskSlice.reducer;

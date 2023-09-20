@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
+import { Container } from 'react-bootstrap';
 
 import { getProducts, updateProducts } from '../redux/productSlice';
 
@@ -39,20 +40,20 @@ function Product() {
     }, [dispatch])
 
     const loadProduct = products.data && products.data.map((el, index) =>
-        <Col className="col-md-3 text-center" key={index} >
+        <Col className="col-md-3 text-center mb-3" key={index} >
             <div className="product product2">
                 <a className="product" style={{ textDecoration: "none", height: "40vh" }} href={"/productDetails?id=" + el['id']}>
-                    <Image style={{ height: "40vh", width: "40vh" }}
+                    <Image
                         src={"https://students.trungthanhweb.com/images/" + el['images']}
-                        fluid />
+                        fluid className='img-fluid' />
                 </a>
                 <a style={{ textDecoration: "none" }} href={"/productDetails?id=" + el['id']}>
                     <h4>{el['name']}</h4></a>
                 <p style={{ color: "red", fontWeight: "bold" }}>{parseInt(el['price']).toLocaleString('en-US')} đ</p>
                 <p>{el['catename']}</p>
                 <p>{el['brandname']}</p>
-                <Button href={"/productDetails?id=" + el['id']} className="me-2" variant='primary' size='lg'>Chi tiết</Button>
-                <Button className="ms-2" variant='success' size='lg' onClick={() => addToCart(parseInt(el['id']))}>Thêm</Button>
+                <Button href={"/productDetails?id=" + el['id']} className="me-2" variant='primary'>Chi tiết</Button>
+                <Button className="ms-2" variant='success' onClick={() => addToCart(parseInt(el['id']))}>Thêm</Button>
             </div>
         </Col>
     )
@@ -122,52 +123,78 @@ function Product() {
             })
         }
     }
+    const loadResult = result && result.length > 0 && result.map((el, index) =>
+        <Col className="col-md-3 text-center mb-3" key={index} >
+            <div className="product product2">
+                <a className="product" style={{ textDecoration: "none", height: "40vh" }} href={"/productDetails?id=" + el['id']}>
+                    <Image
+                        src={"https://students.trungthanhweb.com/images/" + el['image']}
+                        fluid className='img-fluid' />
+                </a>
+                <a style={{ textDecoration: "none" }} href={"/productDetails?id=" + el['id']}>
+                    <h4>{el['name']}</h4></a>
+                <p style={{ color: "red", fontWeight: "bold" }}>{parseInt(el['price']).toLocaleString('en-US')} đ</p>
+                <p>{el['catename']}</p>
+                <p>{el['brandname']}</p>
+                <Button href={"/productDetails?id=" + el['id']} className="me-2" variant='primary'>Chi tiết</Button>
+                <Button className="ms-2" variant='success' onClick={() => addToCart(parseInt(el['id']))}>Thêm</Button>
+            </div>
+        </Col>
+    )
+    console.log(result);
     return (
         <div>
-            <div>
-                <h1 className='text-center'>Sản phẩm</h1>
-                <Row>
-                    <Col className='col-md-2'>
-                        <Form className="d-flex mb-3">
+            <h1 className='text-center'>Sản phẩm</h1>
+            <Row>
+                <Col className='col-md-2 ms-4'>
+                    <Form className="d-flex mb-3">
+                        <Form.Control
+                            type="search"
+                            placeholder="Search"
+                            className="me-2"
+                            aria-label="Search"
+                            onChange={(e) => setInput(e.target.value)}
+                        />
+                        <Button variant="outline-success" className="me-2" onClick={() => { searchItem() }}>Search</Button>
+                    </Form>
+                    <Row>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="inputGroup-sizing-default">Giá sàn</InputGroup.Text>
                             <Form.Control
-                                type="search"
-                                placeholder="Search"
-                                className="me-2"
-                                aria-label="Search"
-                                onChange={(e) => setInput(e.target.value)}
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default"
+                                onChange={(e) => setAbove(e.target.value) && setAbove(0)}
                             />
-                            <Button variant="outline-success" className="me-2" onClick={() => { searchItem() }}>Search</Button>
-                        </Form>
-                        <Row>
-                            <InputGroup className="mb-3">
-                                <InputGroup.Text id="inputGroup-sizing-default">Giá sàn</InputGroup.Text>
-                                <Form.Control
-                                    aria-label="Default"
-                                    aria-describedby="inputGroup-sizing-default"
-                                    onChange={(e) => setAbove(e.target.value) && setAbove(0)}
-                                />
-                            </InputGroup>
-                        </Row>
-                        <Row>
-                            <InputGroup className="mb-3">
-                                <InputGroup.Text id="inputGroup-sizing-default">Giá trần</InputGroup.Text>
-                                <Form.Control
-                                    aria-label="Default"
-                                    aria-describedby="inputGroup-sizing-default"
-                                    onChange={(e) => setBelow(e.target.value) && setBelow(1000000000000)}
-                                />
-                            </InputGroup>
-                        </Row>
-                        <Row>
-                            <Button className="outline-primary" style={{ marginTop: "0px" }} onClick={() => setFilter(true)}>Áp dụng</Button>
-                        </Row>
-                    </Col>
-                    <Col className='col-md-10'><Row>
-                        {loadProduct}
-                        <Button style={{ border: "none", margin: "30px auto" }} className="w-25" variant='outline-primary' onClick={() => showMore()} disabled={isLoading}>{isLoading ? "" : "Xem thêm..."}</Button>
-                    </Row></Col>
-                </Row>
-            </div>
+                        </InputGroup>
+                    </Row>
+                    <Row>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="inputGroup-sizing-default">Giá trần</InputGroup.Text>
+                            <Form.Control
+                                aria-label="Default"
+                                aria-describedby="inputGroup-sizing-default"
+                                onChange={(e) => setBelow(e.target.value) && setBelow(1000000000000)}
+                            />
+                        </InputGroup>
+                    </Row>
+                    <Row>
+                        <Button className="outline-primary" style={{ marginTop: "0px" }} onClick={() => setFilter(true)}>Áp dụng</Button>
+                    </Row>
+                </Col>
+                <Col className='col-md-9'><Row>
+                    {
+                        searchResult === true ?
+                            loadResult :
+                            loadProduct
+                    }{
+                        searchResult === true ?
+                            <div></div>
+                            :
+                            <Button style={{ border: "none", margin: "30px auto" }} className="w-25" variant='outline-primary' onClick={() => showMore()} disabled={isLoading}>{isLoading ? "" : "Xem thêm..."}</Button>
+                    }
+
+                </Row></Col>
+            </Row>
         </div>
     )
 };
