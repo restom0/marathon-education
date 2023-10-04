@@ -1,12 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 import "../css/login.css"
 import { Button, Form, InputGroup } from 'react-bootstrap';
+import { GoogleLogin } from '@react-oauth/google';
+import { googleLogout, useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 function Login() {
     if (localStorage.getItem('token') || localStorage.getItem('token') != null) {
         window.location.replace('/home');
     }
+    const [user, setUser] = useState([]);
+    const [profile, setProfile] = useState([]);
 
+    const login = useGoogleLogin({
+        onSuccess: (codeResponse) => setUser(codeResponse),
+        onError: (error) => console.log('Login Failed:', error)
+    });
     const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -18,6 +27,12 @@ function Login() {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         }
     })
+    const responseMessage = (response) => {
+        console.log(response);
+    };
+    const errorMessage = (error) => {
+        console.log(error);
+    };
 
     const [email, setEmail] = useState('');
 
@@ -39,6 +54,15 @@ function Login() {
             }).then(res => res.json()).then((res) => {
                 if (res.check === true) {
                     localStorage.setItem('token', res.apitoken);
+                    fetch('https://students.trungthanhweb.com/api/checkLoginhtml1', {
+                        method: 'POST',
+                        headers: { "Content-Type": 'application/x-www-form-urlencoded' },
+                        body: data
+                    }).then(res1 => res1.json()).then((res1) => {
+                        if (res.check === true) {
+                            localStorage.setItem('idRole', res1.id);
+                        }
+                    });
                     Toast.fire({
                         icon: 'success',
                         title: 'Đăng nhập thành công'
@@ -55,7 +79,25 @@ function Login() {
             });
         }
     }
-
+    useEffect(
+        () => {
+            if (user) {
+                axios
+                    .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                        headers: {
+                            Authorization: `Bearer ${user.access_token}`,
+                            Accept: 'application/json'
+                        }
+                    })
+                    .then((res) => {
+                        setProfile(res.data);
+                    })
+                    .catch((err) => console.log(err));
+            }
+        },
+        [user]
+    );
+    
     return (
         <div className="wrapper">
             <div className="container1 p-2">
@@ -83,8 +125,8 @@ function Login() {
                         <Form.Check type="checkbox" label="Check me out" />
                     </Form.Group>
 
-                    <button type="submit" className="btn btn-primary w-100" onClick={checkLogin}>Submit</button>
-
+                    <button type="submit" className="btn btn-primary w-100 mb-2" onClick={checkLogin}>Submit</button>
+                    <Button variant='light' className="btn btn-light w-100" onClick={() => login()}>Sign in with Google</Button>
                 </div>
             </div>
         </div>

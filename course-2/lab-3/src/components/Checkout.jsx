@@ -112,7 +112,7 @@ function Checkout() {
         body: data
       }).then(res => res.json()).then((res) => {
         console.log(res);
-        if (res.check == true) {
+        if (res.check === true) {
           const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -124,7 +124,6 @@ function Checkout() {
               toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
           })
-
           Toast.fire({
             icon: 'success',
             title: 'Đặt hàng thành công'

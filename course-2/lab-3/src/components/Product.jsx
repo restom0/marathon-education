@@ -141,7 +141,6 @@ function Product() {
             </div>
         </Col>
     )
-    console.log(result);
     return (
         <div>
             <h1 className='text-center'>Sản phẩm</h1>

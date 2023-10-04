@@ -18,6 +18,8 @@ import { getBrands } from '../redux/brandSlice';
 import { getCarts, deleteItems } from '../redux/cartSlice';
 import { getBills } from '../redux/billsSlice';
 import { getBill } from '../redux/billSlice';
+import Chatbox from './Chatbox';
+import { googleLogout } from '@react-oauth/google';
 
 function Navbar1() {
     if (!localStorage.getItem('token') || localStorage.getItem('token') == null) {
@@ -71,6 +73,10 @@ function Navbar1() {
     const handleCloseCart = () => setShowCart(false);
     const handleShowCart = () => setShowCart(true);
 
+    const [showChat, setShowChat] = useState(false);
+    const handleCloseChat = () => setShowChat(false);
+    const handleShowChat = () => setShowChat(true);
+
     useEffect(() => {
         dispatch(getCates());
         dispatch(getBrands());
@@ -90,7 +96,9 @@ function Navbar1() {
     const loadBrand = brands && brands.map((item) =>
         <NavDropdown.Item key={item.id} href={"brand?page=1&id=" + item.id} id="">{item.name}</NavDropdown.Item>
     )
-
+    const logOut = () => {
+        googleLogout();
+    };
     const logout = () => {
         if (localStorage.getItem('token') || localStorage.getItem('token') != null) {
             Swal.fire({
@@ -339,7 +347,7 @@ function Navbar1() {
                                                 <tr>
                                                     <td style={{ width: "20%" }}><img style={{ width: "50%" }} src={"https://students.trungthanhweb.com/images/" + el.image} alt="" /></td>
                                                     <td><a style={{ textDecoration: "none", color: "blue", textWeight: "bold" }} href={"/productDetails?id=" + el['id']}>{el.name}</a></td >
-                                                    <td>{el.price.toLocaleString('en-US')} đ</td>
+                                                    <td>{parseInt(el.price).toLocaleString('en-US')} đ</td>
                                                     <td>{el.brandname}</td>
                                                     <td>{el.catename}</td>
                                                 </tr>
@@ -414,6 +422,17 @@ function Navbar1() {
 
                 </Modal.Footer>
             </Modal>
+            <Modal show={showChat} onHide={handleCloseChat} size='lg'>
+                <Modal.Header closeButton>
+                    <Modal.Title>Chatbox</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Chatbox />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseBill}>Close</Button>
+                </Modal.Footer>
+            </Modal>
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
                 <Container fluid>
                     <Navbar.Brand href="/"><Image src='https://yt3.googleusercontent.com/KExMKZqWdtVxdDxZaVzQ_xZhE81AviwRDmmZpwveNExBqOwyjmTMUXIhj-lv63sVdUg0TdrhGQ=s900-c-k-c0x00ffffff-no-rj' style={{ width: 50, height: 50 }} fluid></Image></Navbar.Brand>
@@ -446,6 +465,7 @@ function Navbar1() {
                                 aria-label="Search"
                                 onChange={(e) => setInput(e.target.value)}
                             />
+                            <Button variant="outline-success" className="me-2" onClick={() => { handleShowChat() }}>Chatbox</Button>
                             <Button variant="outline-success" className="me-2" onClick={() => { handleShowSearch(); searchItem() }}>Search</Button>
                             <Button variant="outline-success" onClick={() => { handleShowCart(); loadCart1() }}><box-icon name='cart-alt' color='#198754' className="justify-content-center"></box-icon></Button>
                         </Form>
