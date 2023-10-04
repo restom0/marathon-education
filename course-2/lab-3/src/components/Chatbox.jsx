@@ -28,9 +28,9 @@ function Chatbox() {
     };
     const loadChat = chat && chat.map((item) => (
         <ListGroup.Item >
-            <Row style={{ float: 'right' }}>
+            <Row align="end" className='justify-content-end'>
                 <Col className='col-md-10' style={{ height: "auto", paddingRight: 0 }}>
-                    <p className=' rounded ms-1' style={{ height: "auto", border: "1px solid black", display: "inline-block", paddingLeft: "10px", paddingRight: "10px" }}>{item.question}</p>
+                    <p className=' rounded' style={{ height: "auto", border: "1px solid black", display: "inline-block", paddingLeft: "10px", paddingRight: "10px" }}>{item.question}</p>
                 </Col>
                 <Col className='col-md-1' style={{ paddingLeft: 0 }}>
                     <box-icon name='user' type='solid' style={{ border: "1px solid black", height: "4vh", width: "4vh", borderRadius: "100%" }} ></box-icon>
