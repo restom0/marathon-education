@@ -451,9 +451,8 @@ function Navbar1() {
                             <Nav.Link href="/todoredux">Todo Redux</Nav.Link>
                             <NavDropdown title={<box-icon name='user' type='solid' color='#ffffff' ></box-icon>} id="basic-nav-dropdown">
                                 <NavDropdown.Item onClick={handleShowAccount}>Tài khoản</NavDropdown.Item>
-                                <NavDropdown.Item onClick={handleShowBills} >Lịch sử đơn hàng</NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                                <NavDropdown.Item onClick={logout}>Đăng xuất</NavDropdown.Item>
                             </NavDropdown>
 
                         </Nav>
