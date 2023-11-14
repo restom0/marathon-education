@@ -15,8 +15,6 @@ function Loginpage() {
             </Col>
             <Col className='col-6'></Col>
           </div>
-
-
         </Col>
       </Row>
     </div>
