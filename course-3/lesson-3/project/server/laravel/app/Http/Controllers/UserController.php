@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\UserMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use App\Models\scheduleM;
 use App\Models\processM;
 
@@ -138,6 +139,26 @@ class UserController extends Controller
         }
         User::where('id', $request->id)->update(['status' => $request->status, 'updated_at' => now()]);
         return response()->json(['check' => true]);
+    }
+    public function checkLogin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required',
+        ], [
+            'email.required' => 'Chưa có email',
+            'email.email' => 'Email không hợp lệ',
+            'email.exists' => 'Email không tồn tại',
+            'password.required' => 'Không có password',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check' => false, 'msg' => $validator->errors()]);
+        }
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'status' => 1], true)) {
+            return response()->json(['check' => true, 'token' => Auth::user()->remember_token]);
+        } else {
+            return response()->json(['check' => false, 'msg' => 'Sai email hoặc mật khẩu']);
+        }
     }
     public function edit(User $user)
     {
