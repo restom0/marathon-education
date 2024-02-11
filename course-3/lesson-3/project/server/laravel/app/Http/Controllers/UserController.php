@@ -51,6 +51,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'idRole' => $request->idRole,
+            'phone' => $request->phone,
             'password' => Hash::make($random),
         ];
         $mailData = [
@@ -139,6 +140,26 @@ class UserController extends Controller
         }
         User::where('id', $request->id)->update(['status' => $request->status, 'updated_at' => now()]);
         return response()->json(['check' => true]);
+    }
+    public function checkLoginEmail(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ], [
+            'email.required' => 'Chưa có email',
+            'email.email' => 'Email không hợp lệ',
+            'email.exists' => 'Email không tồn tại',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check' => false, 'msg' => $validator->errors()]);
+        }
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            Auth::login($user, true);
+            return response()->json(['check' => true, 'token' => Auth::user()->remember_token]);
+        } else {
+            return response()->json(['check' => false, 'msg' => "Email chưa được đăng ký"]);
+        }
     }
     public function checkLogin(Request $request)
     {

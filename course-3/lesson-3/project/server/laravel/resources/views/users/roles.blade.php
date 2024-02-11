@@ -64,7 +64,7 @@
                     <input type="text" id="rolename" class="form-control" placeholder="Tên loại tài khoản">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="submitRoleBtn">Lưu</button>
                 </div>
             </div>
@@ -134,53 +134,61 @@
                 var old = $(this).text();
                 $('#rolename').val(old);
                 $('#addModal').modal('show');
-                $('#submitRoleBtn').click(function(e) {
-                    e.preventDefault();
-                    var rolename = $('#rolename').val().trim();
-                    if (rolename == '') {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Chưa nhập tên tài khoản"
-                        });
-                    } else if (rolename == old) {
-                        Toast.fire({
-                            icon: "error",
-                            title: "Không thay đổi tên"
-                        });
-                    } else {
-                        $.ajax({
-                            type: "post",
-                            url: "/editRole",
-                            data: {
-                                id: id,
-                                rolename: rolename
-                            },
-                            dataType: "JSON",
-                            success: function(res) {
-                                if (res.check == true) {
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: "Chỉnh sửa thành công"
-                                    }).then(() => {
-                                        window.location.reload();
-                                    })
-                                }
-                                if (res.msg.id) {
-                                    Toast.fire({
-                                        icon: "error",
-                                        title: res.msg.id
-                                    })
-                                }
-                                if (res.msg.rolename) {
-                                    Toast.fire({
-                                        icon: "error",
-                                        title: res.msg.rolename
-                                    })
-                                }
+                editRoleBtn();
+            });
+            $('#closeBtn').click(function(e) {
+                e.preventDefault();
+                $('#rolename').val('');
+            });
+        }
+
+        function editRoleBtn() {
+            $('#submitRoleBtn').click(function(e) {
+                e.preventDefault();
+                var rolename = $('#rolename').val().trim();
+                if (rolename == '') {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Chưa nhập tên tài khoản"
+                    });
+                } else if (rolename == old) {
+                    Toast.fire({
+                        icon: "error",
+                        title: "Không thay đổi tên"
+                    });
+                } else {
+                    $.ajax({
+                        type: "post",
+                        url: "/editRole",
+                        data: {
+                            id: id,
+                            rolename: rolename
+                        },
+                        dataType: "JSON",
+                        success: function(res) {
+                            if (res.check == true) {
+                                Toast.fire({
+                                    icon: "success",
+                                    title: "Chỉnh sửa thành công"
+                                }).then(() => {
+                                    window.location.reload();
+                                })
                             }
-                        });
-                    }
-                });
+                            if (res.msg.id) {
+                                Toast.fire({
+                                    icon: "error",
+                                    title: res.msg.id
+                                })
+                            }
+                            if (res.msg.rolename) {
+                                Toast.fire({
+                                    icon: "error",
+                                    title: res.msg.rolename
+                                })
+                            }
+                        }
+                    });
+                }
             });
         }
 

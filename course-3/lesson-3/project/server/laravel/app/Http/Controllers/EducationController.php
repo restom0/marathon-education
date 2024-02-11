@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourseCateM;
 use App\Models\EduM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,7 @@ class EducationController extends Controller
 {
     public function getEdu()
     {
-        $result = DB::Table('edu_tbl')->get();
+        $result = EduM::all();
         return $result;
     }
     /**
@@ -19,7 +20,7 @@ class EducationController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json($this->getEdu());
     }
 
     /**
@@ -48,13 +49,34 @@ class EducationController extends Controller
         $result = $this->getEdu();
         return response()->json(['check' => true, 'result' => $result]);
     }
+    public function switch(Request $request, EduM $eduM)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:edu_tbl,id',
+        ], [
+            'id.required' => 'Choose a educations for usesr',
+            'id.exists' => "Education doesn't exist",
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check' => false, 'msg' => $validator->errors()]);
+        }
 
+        $status = EduM::where('id', $request->id)->value('status');
+        if ($status == 1) {
+            EduM::where('id', $request->id)->update(['status' => 0, 'updated_at' => now()]);
+        } else {
+            EduM::where('id', $request->id)->update(['status' => 1, 'updated_at' => now()]);
+        }
+        $result = $this->getEdu();
+        return response()->json($result);
+    }
     /**
      * Display the specified resource.
      */
-    public function show(EduM $eduM)
+    public function show(Request $request, EduM $eduM)
     {
-        //
+        $result = EduM::where('status', 1)->get();
+        return response()->json($result);
     }
 
     /**
@@ -70,14 +92,45 @@ class EducationController extends Controller
      */
     public function update(Request $request, EduM $eduM)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:edu_tbl,id',
+            'name' => 'required|unique:edu_tbl,name',
+        ], [
+            'id.required' => 'Choose a educations for usesr',
+            'id.exists' => "Education doesn't exist",
+            'name.required' => 'Fill in name',
+            'name.unique' => 'Name already exist'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check' => false, 'msg' => $validator->errors()]);
+        }
+
+        EduM::where('id', $request->id)->update(['name' => $request->name, 'updated_at' => now()]);
+        $result = EduM::all();
+        return response()->json($result);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EduM $eduM)
+    public function destroy(Request $request, EduM $eduM)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:edu_tbl,id',
+        ], [
+            'id.required' => 'Choose a educations to delete',
+            'id.exists' => "Education doesn't exist"
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['check' => false, 'msg' => $validator->errors()]);
+        }
+        $check = CourseCateM::where('education_id', $request->id)->count(value('id'));
+        if ($check != 0) {
+            return response()->json(['check' => false, 'msg' => 'A category is using this education']);
+        } else {
+            EduM::where('id', $request->id)->delete();
+            $result = $this->getEdu();
+            return response()->json($result);
+        }
     }
 }
