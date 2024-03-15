@@ -1,7 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 
 function Education() {
+  const [edu, setEdu] = useState([]);
+  const [name, setName] = useState("");
+  const [id, setId] = useState();
+  const getEdu = () => {
+    var data = new URLSearchParams();
+    data.append("token", localStorage.getItem("token"));
+    fetch("http://127.0.0.1:8000/api/education?" + data, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setEdu(res);
+      });
+  };
+  const addEdu = () => {
+    var data = new URLSearchParams();
+    data.append("token", localStorage.getItem("token"));
+    data.append("name", name);
+    fetch("http://127.0.0.1:8000/api/education", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setName("");
+      });
+  };
+  const switchEdu = () => {
+    var data = new URLSearchParams();
+    data.append("token", localStorage.getItem("token"));
+    data.append("id", id);
+    fetch("http://127.0.0.1:8000/api/education/status", {
+      method: "PUT",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setId(-1);
+      });
+  };
+  function editEdu() {
+    var data = new URLSearchParams();
+    data.append("id", id);
+    data.append("name", name);
+    data.append("token", localStorage.getItem("token"));
+    fetch("http://127.0.0.1:8000/api/education", {
+      method: "PUT",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setName("");
+        setId(-1);
+      });
+  }
+  function deleteEdu() {
+    var data = new URLSearchParams();
+    data.append("token", localStorage.getItem("token"));
+    data.append("id", id);
+    fetch("http://127.0.0.1:8000/api/education", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: data,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setId(-1);
+      });
+  }
+  useEffect(() => {
+    getEdu();
+  }, []);
   return (
     <div>
       <Sidebar />

@@ -65,12 +65,12 @@ Route::prefix('process')->controller(ProcessController::class)->group(function (
     Route::delete('/class', 'removeClass');
     Route::put('/pass', 'editPass');
 });
-Route::middleware('checkLogin1')->controller(EducationController::class)->group(function () {
-    Route::get('/education', 'index');
-    Route::post('/education', 'create');
-    Route::post('/editEducation', 'edit');
-    Route::post('/deleteEducation', 'delete');
-    Route::post('/switchEducation', 'switch');
+Route::prefix('education')->middleware('checkLogin1')->controller(EducationController::class)->group(function () {
+    Route::get('/', 'index');
+    Route::post('/', 'create');
+    Route::put('/', 'edit');
+    Route::delete('/', 'delete');
+    Route::put('/status', 'switch');
 });
 Route::middleware('checkLogin1')->controller(CourseController::class)->group(function () {
     Route::get('/course', 'index');
